@@ -1,5 +1,4 @@
 from django.db import models
-from users.models import CustomUser
 
 # Create your models here.
 
@@ -40,7 +39,7 @@ class Products(models.Model):
     # categorias del producto, esta tiene una relacion muchos a muchos
     category = models.ManyToManyField(Category, related_name="category_products")
     # este sera el "autor" del producto
-    producer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="producer_products")
+    producer = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name="producer_products")
     # fecha del dia y la hora de la creacion del producto
     date_of_registration = models.DateTimeField(auto_now=True)
     # lista de tupla que se utiliza para restrinigr las opciones del estado del producto

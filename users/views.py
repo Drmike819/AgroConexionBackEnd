@@ -1,13 +1,15 @@
 from django.shortcuts import render
-
+from rest_framework.views import APIView
 from rest_framework import status, generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer
+from .models import FavoriteProducts
+from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer, FavoriteProductsSerializer
 # Create your views here.
 
 # Vista para el registro de usuarios
@@ -49,3 +51,67 @@ class LoginView(TokenObtainPairView):
         ]
         # retornamos los campos
         return Response({"fields": fields})
+
+
+# Vista que nos permite ver y agregar productos a favoritos
+class FavoritesView(APIView):
+    # Indicamos el método de autenticación
+    authentication_classes = [JWTAuthentication]
+    # Solo los usuarios autenticados pueden acceder a esta vista
+    permission_classes = [IsAuthenticated]
+    
+    # Método GET: obtiene los productos favoritos del usuario autenticado
+    def get(self, request, *args, **kwargs):
+        # Filtramos los productos favoritos por el usuario autenticado
+        favorite = FavoriteProducts.objects.filter(user=request.user)
+        # Serializamos los productos favoritos
+        serializer = FavoriteProductsSerializer(favorite, many=True)
+        # Retornamos la lista de productos favoritos
+        return Response(serializer.data)
+    
+    # Método POST: permite agregar un nuevo producto a favoritos
+    def post(self, request, *args, **kwargs):
+        serializer = FavoriteProductsSerializer(
+            # Enviamos los datos enviados por el cliente (product_id)
+            data=request.data,
+            # Enviamos también el request completo como contexto para acceder a request.user en el serializador
+            context={'request': request}
+        )
+        # Validamos el serializador
+        if serializer.is_valid():
+            # Si es válido, guardamos el objeto asignando automáticamente el usuario autenticado
+            serializer.save(user=request.user)
+            # Retornamos la información del producto favorito creado
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Si los datos no son válidos, retornamos los errores
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+# Vista que nos permite eliminar un producto de la lista de favoritos
+class FavoriteDeleteView(APIView):
+    # Indicamos el método de autenticación
+    authentication_classes = [JWTAuthentication]
+    # Solo los usuarios autenticados pueden acceder a esta vista
+    permission_classes = [IsAuthenticated]
+
+    # Método DELETE: permite eliminar un producto específico de los favoritos del usuario
+    def delete(self, request, product_id, *args, **kwargs):
+        try:
+            # Buscamos el producto favorito por el usuario autenticado y el ID del producto recibido
+            favorite = FavoriteProducts.objects.get(
+                user=request.user,
+                product_id=product_id
+            )
+            # Eliminamos el registro encontrado
+            favorite.delete()
+            # Retornamos una respuesta de éxito sin contenido
+            return Response(
+                {"detail": "Producto eliminado de favoritos correctamente."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+        # Si no se encuentra el producto favorito, retornamos un error 404
+        except FavoriteProducts.DoesNotExist:
+            return Response(
+                {"detail": "El producto no está en tus favoritos."},
+                status=status.HTTP_404_NOT_FOUND
+            )

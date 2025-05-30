@@ -1,9 +1,11 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, FavoriteProducts
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from products.serializer import SerializerProducts
 
 # Serializador de registro
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -78,3 +80,34 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Retornamos los datos junto con los tokens y la información del usuario
         return data
+
+
+# Serializador para agregar un producto a favoritos
+class FavoriteProductsSerializer(serializers.ModelSerializer):
+    
+    # llamamos al serializador de los productos, esto nos ayuda a tener la informaciond e los productos favoritos
+    product = SerializerProducts(read_only=True)
+    
+    class Meta:
+        # Modelo que utilizaremos
+        model = FavoriteProducts
+        # Campos que se incluirán en la serialización
+        fields = ['id', 'user', 'product', 'added_at']
+        # Indicamos que estos campos serán de solo lectura. 
+        # El cliente no podrá modificarlos directamente.
+        read_only_fields = ['id', 'user', 'added_at']
+
+    # Función que valida que el usuario no agregue el mismo producto dos veces a favoritos
+    def validate(self, attrs):
+        # Obtenemos el usuario autenticado desde el contexto (enviado desde la vista)
+        user = self.context['request'].user
+        # Obtenemos el producto que el usuario desea agregar a favoritos
+        product = attrs.get('product')
+
+        # Validamos que el producto no haya sido ya agregado por este usuario
+        if FavoriteProducts.objects.filter(user=user, product=product).exists():
+            # Si ya existe, devolvemos un mensaje de error
+            raise serializers.ValidationError("Este producto ya está en tus favoritos.")
+
+        # Si todo está bien, devolvemos los datos validados
+        return attrs

@@ -1,7 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 # Create your models here.\
-    
+
+
+# creacion del modelo de usuario customizado 
 class CustomUser(AbstractUser):
     # Email debe ser único
     email = models.EmailField(max_length=100, unique=True, null=False, blank=False)
@@ -28,3 +30,16 @@ class CustomUser(AbstractUser):
         
         super().save(*args, **kwargs)
 
+
+# creacion de la tabla favoritos
+class FavoriteProducts(models.Model):
+    # campo en donde indicamos la union entre usuario y la tabla favorito (si el usuario es eliminado la informacion se eliminara)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='favorites')
+    # campo en donde indicamos la union entre producto y la tabla favoritos (si el producto es eliminado la informacion se eliminara)
+    product = models.ForeignKey('products.Products', on_delete=models.CASCADE, related_name='favorited_by')
+    # campo de la fecha de agregacion a favoritos
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    # clase que nos permite indicar que un usuario no puede repetir un producto en favoritos
+    class Meta:
+        unique_together = ('user', 'product')
