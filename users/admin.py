@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, FavoriteProducts
+from .models import CustomUser, FavoriteProducts, ShoppingCart, CartProducts 
 from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 
@@ -38,4 +38,9 @@ class CustomUserAdmin(UserAdmin):
 
 # Registra tu CustomUser con la configuración personalizada
 admin.site.register(CustomUser, CustomUserAdmin)
+
 admin.site.register(FavoriteProducts)
+
+admin.site.register(ShoppingCart)
+
+admin.site.register(CartProducts)

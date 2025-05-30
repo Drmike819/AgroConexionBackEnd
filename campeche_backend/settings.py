@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     # perimite documentar las apis(no se esta utilizando actualmente)
     'coreapi',
     # aplicaciones del projecto
-    'users',
+    'users.apps.UsersConfig',
     'products'
 ]
 
