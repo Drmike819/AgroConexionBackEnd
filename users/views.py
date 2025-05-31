@@ -8,8 +8,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .models import FavoriteProducts
-from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer, FavoriteProductsSerializer
+from .models import FavoriteProducts, ShoppingCart, CartProducts
+from products.models import Products
+from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer, FavoriteProductsSerializer, CartProductsUserSerializer, CartUserSerializer
 # Create your views here.
 
 # Vista para el registro de usuarios
@@ -115,3 +116,93 @@ class FavoriteDeleteView(APIView):
                 {"detail": "El producto no está en tus favoritos."},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+
+# Vista que nos permite obtener y agregar los productos del carrito
+class CartUserView(APIView):
+    # Indicamos el método de autenticación
+    authentication_classes = [JWTAuthentication]
+    # Solo los usuarios autenticados pueden acceder a esta vista
+    permission_classes = [IsAuthenticated]
+
+    # GET: Obtiene todos los productos del carrito del usuario autenticado
+    def get(self, request, *args, **kwargs):
+        try:
+            # Obtenemos el carrito del usuario autenticado
+            cart = ShoppingCart.objects.get(user=request.user)
+        except ShoppingCart.DoesNotExist:
+            # Si el usuario no tiene un carrito, se devuelve un mensaje de error
+            return Response({"detail": "El usuario no tiene un carrito."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Serializamos y devolvemos la información del carrito
+        serializer = CartUserSerializer(cart)
+        return Response(serializer.data)
+
+    # POST: Agrega un producto al carrito del usuario autenticado
+    def post(self, request, *args, **kwargs):
+        # Obtenemos el ID del producto del cuerpo de la solicitud
+        product_id = request.data.get('product_id')
+        # Obtenemos la cantidad, por defecto es 1 si no se proporciona
+        quantity = request.data.get('quantity', 1)
+
+        # Validamos que se haya proporcionado el ID del producto
+        if not product_id:
+            return Response({"detail": "El ID del producto es requerido."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Obtenemos el producto correspondiente
+            product = Products.objects.get(id=product_id)
+        except Products.DoesNotExist:
+            # Si el producto no existe, devolvemos un error
+            return Response({"detail": "Producto no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Verificamos que haya suficiente stock del producto
+        if quantity > product.stock:
+            return Response(
+                {"detail": "La cantidad solicitada es mayor a la disponible."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Obtenemos o creamos el carrito del usuario
+        cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+
+        # Verificamos si el producto ya está en el carrito
+        if CartProducts.objects.filter(cart=cart, product=product).exists():
+            return Response({"detail": "Este producto ya está en el carrito."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Agregamos el producto al carrito
+        CartProducts.objects.create(cart=cart, product=product, quantity=quantity)
+
+        # Devolvemos una respuesta de éxito
+        return Response({"detail": "Producto agregado al carrito."}, status=status.HTTP_201_CREATED)
+
+
+# Viste que nos permite eliminar un producto del carrito 
+class DeleteProductCartUserView(APIView):
+    # Indicamos el método de autenticación
+    authentication_classes = [JWTAuthentication]
+    # Solo los usuarios autenticados pueden acceder a esta vista
+    permission_classes = [IsAuthenticated]
+
+    # DELETE: Permite eliminar un producto del carrito del usuario autenticado
+    def delete(self, request, product_id):
+        try:
+            # Obtenemos el carrito del usuario autenticado
+            cart = ShoppingCart.objects.get(user=request.user)
+        except ShoppingCart.DoesNotExist:
+            # Si el carrito no existe, devolvemos un mensaje de error
+            return Response({"detail": "El usuario no tiene un carrito."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            # Obtenemos el producto del carrito según el ID proporcionado
+            cart_product = CartProducts.objects.get(cart=cart, product_id=product_id)
+        except CartProducts.DoesNotExist:
+            # Si el producto no está en el carrito, devolvemos un mensaje de error
+            return Response({"detail": "Producto no encontrado en el carrito."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Eliminamos el producto del carrito
+        cart_product.delete()
+
+        # Devolvemos una respuesta exitosa sin contenido
+        return Response({"detail": "Producto eliminado del carrito."}, status=status.HTTP_204_NO_CONTENT)
+

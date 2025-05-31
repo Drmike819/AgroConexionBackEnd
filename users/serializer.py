@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import CustomUser, FavoriteProducts
+
+from .models import CustomUser, FavoriteProducts, ShoppingCart, CartProducts
+
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
@@ -111,3 +113,32 @@ class FavoriteProductsSerializer(serializers.ModelSerializer):
 
         # Si todo está bien, devolvemos los datos validados
         return attrs
+
+
+# Serializador para los productos en el carrito
+class CartProductsUserSerializer(serializers.ModelSerializer):
+    # Usamos el serializador de productos para mostrar su información detallada
+    product = SerializerProducts(read_only=True)
+
+    class Meta:
+        # Indicamos el modelo que se va a serializar
+        model = CartProducts
+        # Campos que se incluirán en la representación
+        fields = ['id', 'product', 'quantity']
+        # El campo 'id' no podrá ser modificado por el usuario
+        read_only_fields = ['id']
+
+
+# Serializador para el carrito del usuario
+class CartUserSerializer(serializers.ModelSerializer):
+    # Utilizamos el serializador previamente definido para mostrar los productos del carrito del usuario autenticado
+    products = CartProductsUserSerializer(read_only=True, many=True)
+
+    class Meta:
+        # Indicamos el modelo que se va a serializar
+        model = ShoppingCart
+        # Campos que se incluirán en la representación
+        fields = ['id', 'created_at', 'products']
+        # Los campos 'id' y 'created_at' no pueden ser modificados por el cliente
+        read_only_fields = ['id', 'created_at']
+
