@@ -12,5 +12,5 @@ class UsersConfig(AppConfig):
     # Función que se ejecuta al cargar la aplicación para registrar señales
     def ready(self):
         # Importamos el módulo de señales para que los receptores se activen
-        from . import signals
+        from cart import signals
 

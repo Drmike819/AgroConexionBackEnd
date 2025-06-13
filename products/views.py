@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import SerializerCategories, SerializerProducts, ProductSerializer
+from .serializer import SerializerCategories, SerializerProducts
 from rest_framework.views import APIView
 from .models import Category, Products
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -39,7 +39,7 @@ class ProducstView(APIView):
         return Response(serializer.data) 
 
 
-# creacion de la (API) para obtener la informacion de un profducto en concreto
+# creacion de la (API) para obtener la informacion de un producto en concreto
 class DetailProductView(APIView):
     # indicamos los permisos que solicita la API
     permission_classes = [AllowAny]
@@ -128,7 +128,7 @@ class FormProductosView(APIView):
                 return Response({"category": ["Formato inválido. Se espera una lista de IDs numéricos."]}, status=status.HTTP_400_BAD_REQUEST)
 
         # serializador para verificar los datos
-        serializer = ProductSerializer(data=data)
+        serializer = SerializerProducts(data=data)
         # si el serializador es correcto 
         if serializer.is_valid():
             # guarda el nuevo producto en la base de datos

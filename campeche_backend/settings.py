@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'coreapi',
     # aplicaciones del projecto
     'users.apps.UsersConfig',
-    'products'
+    'products',
+    'cart'
 ]
 
 MIDDLEWARE = [

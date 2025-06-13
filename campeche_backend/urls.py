@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),    
     path('api/users/', include('users.urls')),
     path('api/products/', include('products.urls')),
+    path('api/users/cart/', include('cart.urls')),
 ]
 # Solo en modo de desarrollo, sirve los archivos multimedia.
 if settings.DEBUG:
