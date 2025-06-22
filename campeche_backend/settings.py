@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     # aplicaciones del projecto
     'users.apps.UsersConfig',
     'products',
-    'cart'
+    'cart',
+    'invoices',
 ]
 
 MIDDLEWARE = [
