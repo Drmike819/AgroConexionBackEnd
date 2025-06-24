@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/products/', include('products.urls')),
     path('api/users/cart/', include('cart.urls')),
+    path('api/users/invoices/', include('invoices.urls')),
+
 ]
 # Solo en modo de desarrollo, sirve los archivos multimedia.
 if settings.DEBUG:

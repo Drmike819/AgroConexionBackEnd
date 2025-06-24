@@ -1,0 +1,39 @@
+USERS    
+    METHOD GET AND POST
+    http://localhost:8000/api/users/login/
+    METHOD GET AND POST
+    http://localhost:8000/api/users/register/
+
+
+
+PRODUCTS
+    METHOD GET
+    http://localhost:8000/api/products/categories/
+    METHOD GET
+    http://localhost:8000/api/products/list-products/
+    METHOD GET
+    http://localhost:8000/api/products/product/<int:product_id>/
+    METHOD POST
+    http://localhost:8000/api/products/form/new-product/
+
+
+CART
+    METHOD GET
+    http://localhost:8000/api/users/cart/favorites/
+    METHOD POST
+    http://localhost:8000/api/users/cart/favorites/<int:product_id>/
+    METHOD GET Y POST
+    http://localhost:8000/api/users/cart/user/cart/
+    METHOD DELETE
+    http://localhost:8000/api/users/cart/cart/<int:product_id>/
+
+
+INVOICES
+    METHOD POST
+    http://localhost:8000/api/users/invoices/create/
+    METHOD GET
+    http://localhost:8000/api/users/invoices/list-invoice/
+    METHOD GET
+    http://localhost:8000/api/users/invoices/invoice/<int:id>/
+    METHOD POST
+    http://localhost:8000/api/users/invoices/invoice/from-cart/
