@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # libreria que nos permite crear apis
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     # perimite documentar las apis(no se esta utilizando actualmente)
     'coreapi',
     # aplicaciones del projecto
@@ -145,7 +146,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # especificamos los dominios que tienen permitido hacer peticiones
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173'
+    'http://localhost:5173',
+    'http://localhost:3000',
+    
 ]
 
 REST_FRAMEWORK = {
@@ -172,17 +175,10 @@ from datetime import timedelta
 
 # definimos los tiempos de lo stokens
 SIMPLE_JWT = {
-    
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
-    'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
-    'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
-    
-    # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    # 'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    # # no se cambia el token de refrehs cuando el usuario pide un topoken de access
-    # 'ROTATE_REFRESH_TOKENS': True,
-    # # evita utilizar un token ya utilizaso
-    # 'BLACKLIST_AFTER_ROTATION': True,
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_BLACKLIST_ENABLED': True,
 }

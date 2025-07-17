@@ -15,6 +15,9 @@ PRODUCTS
     http://localhost:8000/api/products/product/<int:product_id>/
     METHOD POST
     http://localhost:8000/api/products/form/new-product/
+    
+    http://localhost:8000/api/products/edit-product/<int:product_id>/
+    http://localhost:8000/api/products/delete-product/<int:product_id>/
 
 
 CART
@@ -25,7 +28,7 @@ CART
     METHOD GET Y POST
     http://localhost:8000/api/users/cart/user/cart/
     METHOD DELETE
-    http://localhost:8000/api/users/cart/cart/<int:product_id>/
+    http://localhost:8000/api/users/cart/<int:product_id>/
 
 
 INVOICES

@@ -1,6 +1,13 @@
 from .models import Category, Products, ProductImage
 from rest_framework import serializers
 
+# serializer para tener las categorias en archivo JSON(API)
+class SerializerCategories(serializers.ModelSerializer):
+    class Meta:
+        # indicamo el modelo que deseamos utilizar
+        model = Category
+        # indicamos lo campos que queremos utilizar
+        fields = '__all__'
 
 # creacion del serializer de las imagenes de los productos    
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -38,7 +45,7 @@ class SerializerProducts(serializers.ModelSerializer):
 
                
 # serializer para tener las categorias en archivo JSON(API)
-class SerializerCategories(serializers.ModelSerializer):
+class SerializerCategoriesProducs(serializers.ModelSerializer):
     # Añadimos el serializador de productos para mostar todo los productos asociados
     # many=True: Permitimos que el producto tenga varios productos
     # read_only=True: Solo se pueden ver los productos mas no modificarlos

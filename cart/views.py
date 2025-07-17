@@ -113,25 +113,52 @@ class CartUserView(APIView):
             # Si el producto no existe, devolvemos un error
             return Response({"detail": "Producto no encontrado."}, status=status.HTTP_404_NOT_FOUND)
 
-        # Verificamos que haya suficiente stock del producto
-        if quantity > product.stock:
-            return Response(
-                {"detail": "La cantidad solicitada es mayor a la disponible."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
         # Obtenemos o creamos el carrito del usuario
         cart, created = ShoppingCart.objects.get_or_create(user=request.user)
 
         # Verificamos si el producto ya está en el carrito
-        if CartProducts.objects.filter(cart=cart, product=product).exists():
-            return Response({"detail": "Este producto ya está en el carrito."}, status=status.HTTP_400_BAD_REQUEST)
+        cart_product, product_created = CartProducts.objects.get_or_create(
+            cart=cart, 
+            product=product,
+            defaults={'quantity': quantity}
+        )
 
-        # Agregamos el producto al carrito
-        CartProducts.objects.create(cart=cart, product=product, quantity=quantity)
-
-        # Devolvemos una respuesta de éxito
-        return Response({"detail": "Producto agregado al carrito."}, status=status.HTTP_201_CREATED)
+        if not product_created:
+            # Si el producto ya existe, aumentamos la cantidad
+            new_quantity = cart_product.quantity + quantity
+            
+            # Verificamos que la nueva cantidad no exceda el stock disponible
+            if new_quantity > product.stock:
+                return Response(
+                    {"detail": f"La cantidad total ({new_quantity}) excede el stock disponible ({product.stock})."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Actualizamos la cantidad
+            cart_product.quantity = new_quantity
+            cart_product.save()
+            
+            return Response({
+                "detail": "Cantidad del producto actualizada en el carrito.",
+                "product_id": product_id,
+                "new_quantity": new_quantity
+            }, status=status.HTTP_200_OK)
+        else:
+            # Si es un producto nuevo, verificamos que no exceda el stock
+            if quantity > product.stock:
+                # Si excede el stock, eliminamos el producto recién creado
+                cart_product.delete()
+                return Response(
+                    {"detail": "La cantidad solicitada es mayor a la disponible."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Devolvemos una respuesta de éxito para producto nuevo
+            return Response({
+                "detail": "Producto agregado al carrito.",
+                "product_id": product_id,
+                "quantity": quantity
+            }, status=status.HTTP_201_CREATED)
 
 
 # Viste que nos permite eliminar un producto del carrito 
@@ -161,4 +188,4 @@ class DeleteProductCartUserView(APIView):
         cart_product.delete()
 
         # Devolvemos una respuesta exitosa sin contenido
-        return Response({"detail": "Producto eliminado del carrito."}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"detail": "Producto eliminado del carrito."}, status=status.HTTP_200_OK)

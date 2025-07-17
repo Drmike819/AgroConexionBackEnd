@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -7,7 +6,7 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from products.models import Products
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer
 # Create your views here.
 
@@ -52,3 +51,19 @@ class LoginView(TokenObtainPairView):
         return Response({"fields": fields})
 
 
+class LogoutView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        refresh_token = request.data.get("refresh")
+
+        if not refresh_token:
+            return Response({"detail": "Refresh token requerido."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"detail": "Sesión cerrada exitosamente."}, status=status.HTTP_200_OK)
+        except TokenError:
+            return Response({"detail": "Token inválido o ya expirado."}, status=status.HTTP_400_BAD_REQUEST)

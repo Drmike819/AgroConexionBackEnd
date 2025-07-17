@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializer import InvoiceCreateSerializer, InvoiceSerializer, DetailInvoice
 from django.db import transaction
+from django.db.models import Sum
 
 from cart.models import ShoppingCart
 
@@ -147,3 +148,52 @@ class InvoiceDetailView(RetrieveAPIView):
     # Obtenemos el contexto
     def get_serializer_context(self):
         return {'request': self.request}
+    
+
+# Vista que nos permite ver estadisticas
+class UserStatsView(APIView):
+    # Auteticacion requerida
+    authentication_classes = [JWTAuthentication]
+    # Tipo de permisos para acceder a la vista
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Obtenemos el usuario logeado
+        user = request.user
+
+        # Total gastado por el usuario como comprador
+        total_spent = Invoice.objects.filter(user=user).aggregate(total=Sum('total'))['total'] or 0
+
+        # Total ganado por el usuario como vendedor
+        total_earned = DetailInvoice.objects.filter(seller=user).aggregate(total=Sum('subtotal'))['total'] or 0
+
+        # Producto más vendido (por cantidad total en todas las facturas)
+        most_sold = (
+            DetailInvoice.objects
+            .values('product__name')
+            .annotate(total_quantity=Sum('quantity'))
+            .order_by('-total_quantity')
+            .first()
+        )
+
+        # Producto menos vendido (por cantidad total en todas las facturas)
+        least_sold = (
+            DetailInvoice.objects
+            .values('product__name')
+            .annotate(total_quantity=Sum('quantity'))
+            .order_by('total_quantity')
+            .first()
+        )
+
+        return Response({
+            'total_spent': total_spent,
+            'total_earned': total_earned,
+            'most_sold_product': {
+                'name': most_sold['product__name'] if most_sold else None,
+                'quantity': most_sold['total_quantity'] if most_sold else 0
+            },
+            'least_sold_product': {
+                'name': least_sold['product__name'] if least_sold else None,
+                'quantity': least_sold['total_quantity'] if least_sold else 0
+            }
+        })

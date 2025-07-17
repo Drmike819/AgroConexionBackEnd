@@ -17,6 +17,8 @@ class CustomUser(AbstractUser):
     # Celular del usuario
     phone_number = models.CharField(max_length=10, blank=True, null=True)
     
+    
+    
     # Sobrescribimos el método __str__ para que sea más legible
     def __str__(self):
         return self.username
