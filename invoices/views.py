@@ -1,13 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializer import InvoiceCreateSerializer, InvoiceSerializer, DetailInvoice
 from django.db import transaction
 from django.db.models import Sum
 
 from cart.models import ShoppingCart
+from products.models import Products, ProductImage
+from products.serializer import SerializerProducts
 
 from .models import Invoice
 # Create your views here.
@@ -197,3 +199,37 @@ class UserStatsView(APIView):
                 'quantity': least_sold['total_quantity'] if least_sold else 0
             }
         })
+        
+   
+# Vista que nos permite saber los 5 productos mas vendidos     
+class BestSellingProducts(APIView):
+    # Indicamos que cualquier persona puede acceder a la api
+    permission_classes = [AllowAny]
+    
+    # Metodo GET
+    def get(self, request, *args, **kwargs):
+        top_products = (
+            # Indicamos el modelo a autilizar
+            DetailInvoice.objects
+            # Obtenemos el id del producto
+            .values('product')
+            # Sumas las catidad de veces que fue vendido el producto
+            .annotate(total_quantity=Sum('quantity'))
+            # Ordenamos de los mas vendidos a los menos vendidos y delimitamos la respuesta a 5 resultados
+            .order_by('-total_quantity')[:5]
+        )
+        
+        # Lista de los ids de los productos mas vendidos
+        product_ids = [product['product'] for product in top_products]
+        
+        # Obtenemos el producto filktrado por el id
+        products = Products.objects.filter(id__in = product_ids)
+        # Organizamos la lista de los productos por su index en la lista de ids de los productos
+        products = sorted(products, key=lambda p: product_ids.index(p.id))
+        
+        # Serializamos la informacion de los productos
+        serializer = SerializerProducts(products, many=True)
+        
+        # Retornamos la informacion
+        return Response(serializer.data)
+        

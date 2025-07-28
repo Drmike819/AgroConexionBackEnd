@@ -56,23 +56,3 @@ class SerializerCategoriesProducs(serializers.ModelSerializer):
         # indicamos lo campos que queremos utilizar
         fields = '__all__'
         
-
-# # creacion del serializadoe para crear un nuevo producto
-# class NewProductSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         # indicamos el modelo que utilizaremos
-#         model = Products
-#         # indicamos los campos a utilizar
-#         fields = '__all__'
-
-#     # funcion personalizada para validar el precio
-#     def validate_price(self, value):
-#         if value <= 0:
-#             raise serializers.ValidationError("El precio debe ser mayor a 0")
-#         return value
-
-#     # funcion personalizada para validar el stock
-#     def validate_stock(self, value):
-#         if value < 0:
-#             raise serializers.ValidationError("El stock no puede ser negativo")
-#         return value

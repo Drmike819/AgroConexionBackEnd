@@ -40,3 +40,5 @@ INVOICES
     http://localhost:8000/api/users/invoices/invoice/<int:id>/
     METHOD POST
     http://localhost:8000/api/users/invoices/invoice/from-cart/
+    
+    http://localhost:8000/api/users/invoices/top-selling/
