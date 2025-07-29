@@ -149,6 +149,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "485zzb5kyvi7ox8kgrou5dzy1ebw6ims",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAUBO_iGln-xLFNSc8ZrPe8Dg6gRIqTCnF3iJQC2p2ZfYlE21rT1sqSRoiz0Fqcfkem_CjTTnCn6TbLPE_rMrLcFXnQJq8zyvNyuH8HlVr91p2FYkXoTB-sAg2IBtF3SikEnR05DfgQgi4M4yNntsU7qxH6bHgQ7w8ASTgo:1ugb4t:Kvv4_D91IeSv2Qu4IiY4HiY2F3ehSjZvYpJmp_UjbFU",
+    "expire_date": "2025-08-12T03:32:35.302Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "4za04xiemn9gqtepl0un4sdw3h9mb0i3",
   "fields": {
     "session_data": ".eJxVjMsOwiAQRf-FtSHAAAWX7v0GMsNDqgaS0q6M_65NutDtPefcFwu4rTVsIy9hTuzMJDv9boTxkdsO0h3brfPY27rMxHeFH3Twa0_5eTncv4OKo35rEjJbUZRxQnsjPPgJkby30driipECTPKZnCECq4mUBa0ngYA6KtDs_QG-bTbg:1tbp8f:lqQ8r3axTLCtekcol7z4-rJ3FxawKv1Sb1vZD1sln60",
@@ -344,7 +352,7 @@
   "pk": 3,
   "fields": {
     "product": 2,
-    "image": "products_pictures/th.jpeg"
+    "image": "products_pictures/manzanaRoja.webp"
   }
 },
 {
@@ -352,7 +360,7 @@
   "pk": 4,
   "fields": {
     "product": 3,
-    "image": "products_pictures/th_BXQNCPH.jpeg"
+    "image": "products_pictures/Platano_maduro.jpeg"
   }
 },
 {
@@ -360,7 +368,7 @@
   "pk": 5,
   "fields": {
     "product": 4,
-    "image": "products_pictures/th_W9qaODO.jpeg"
+    "image": "products_pictures/papaCriolla.jpeg"
   }
 },
 {
@@ -368,7 +376,7 @@
   "pk": 6,
   "fields": {
     "product": 5,
-    "image": "products_pictures/th_wUZdQ6E.jpeg"
+    "image": "products_pictures/cebollaLarga.webp"
   }
 },
 {
@@ -376,7 +384,7 @@
   "pk": 7,
   "fields": {
     "product": 6,
-    "image": "products_pictures/th_qbFXpju.jpeg"
+    "image": "products_pictures/frijol.jpg"
   }
 },
 {
@@ -384,7 +392,7 @@
   "pk": 8,
   "fields": {
     "product": 7,
-    "image": "products_pictures/th_YeNi7OY.jpeg"
+    "image": "products_pictures/ArrozIntegrtal.webp"
   }
 },
 {
@@ -392,7 +400,7 @@
   "pk": 9,
   "fields": {
     "product": 8,
-    "image": "products_pictures/th_iujSFiC.jpeg"
+    "image": "products_pictures/LecheEntera.jpg"
   }
 },
 {
@@ -400,7 +408,7 @@
   "pk": 10,
   "fields": {
     "product": 9,
-    "image": "products_pictures/th_m8jAgVS.jpeg"
+    "image": "products_pictures/quesoCampesino.webp"
   }
 },
 {
@@ -408,7 +416,7 @@
   "pk": 11,
   "fields": {
     "product": 10,
-    "image": "products_pictures/th_McDJTRF.jpeg"
+    "image": "products_pictures/carneRes.jpg"
   }
 },
 {
@@ -416,7 +424,7 @@
   "pk": 12,
   "fields": {
     "product": 11,
-    "image": "products_pictures/th_HaNWA1k.jpeg"
+    "image": "products_pictures/pechugadePollo.jpeg"
   }
 },
 {
@@ -424,7 +432,7 @@
   "pk": 14,
   "fields": {
     "product": 13,
-    "image": "products_pictures/th_EpbZdUS.jpeg"
+    "image": "products_pictures/SalchichonAntioqueno.jpg"
   }
 },
 {
@@ -432,7 +440,7 @@
   "pk": 15,
   "fields": {
     "product": 14,
-    "image": "products_pictures/th_gV4Pgm8.jpeg"
+    "image": "products_pictures/huevos.jpg"
   }
 },
 {
@@ -440,7 +448,7 @@
   "pk": 16,
   "fields": {
     "product": 15,
-    "image": "products_pictures/th_WSVFeIl.jpeg"
+    "image": "products_pictures/panAlinado.jpg"
   }
 },
 {
@@ -448,7 +456,7 @@
   "pk": 17,
   "fields": {
     "product": 16,
-    "image": "products_pictures/th_4Qdkb0i.jpeg"
+    "image": "products_pictures/mielAbeja.jpg"
   }
 },
 {
@@ -456,7 +464,7 @@
   "pk": 18,
   "fields": {
     "product": 17,
-    "image": "products_pictures/th_T2uBAeP.jpeg"
+    "image": "products_pictures/jugoNaraga.jpg"
   }
 },
 {
@@ -464,7 +472,7 @@
   "pk": 19,
   "fields": {
     "product": 18,
-    "image": "products_pictures/th_WcdG9ux.jpeg"
+    "image": "products_pictures/cervezaArtesanal.jpg"
   }
 },
 {
@@ -472,7 +480,7 @@
   "pk": 20,
   "fields": {
     "product": 19,
-    "image": "products_pictures/th_wEzfwxz.jpeg"
+    "image": "products_pictures/cafeOrganico.webp"
   }
 },
 {
@@ -480,7 +488,7 @@
   "pk": 21,
   "fields": {
     "product": 20,
-    "image": "products_pictures/th_7YWxmPx.jpeg"
+    "image": "products_pictures/chia.webp"
   }
 },
 {
@@ -488,7 +496,7 @@
   "pk": 22,
   "fields": {
     "product": 21,
-    "image": "products_pictures/th_VuxuXgB.jpeg"
+    "image": "products_pictures/artesania.jpeg"
   }
 },
 {
@@ -496,7 +504,7 @@
   "pk": 23,
   "fields": {
     "product": 22,
-    "image": "products_pictures/th_8ep7c50.jpeg"
+    "image": "products_pictures/albahaca.jpg"
   }
 },
 {
@@ -504,7 +512,7 @@
   "pk": 24,
   "fields": {
     "product": 23,
-    "image": "products_pictures/th_eJuKr9t.jpeg"
+    "image": "products_pictures/mermeladaMora.jpeg"
   }
 },
 {
@@ -512,7 +520,7 @@
   "pk": 25,
   "fields": {
     "product": 24,
-    "image": "products_pictures/th_ad1CL4K.jpeg"
+    "image": "products_pictures/limon.webp"
   }
 },
 {
@@ -520,7 +528,7 @@
   "pk": 26,
   "fields": {
     "product": 25,
-    "image": "products_pictures/th_2p4Edrr.jpeg"
+    "image": "products_pictures/TOMATE-DE-ARBOL2-600x600.jpg"
   }
 },
 {
@@ -528,7 +536,7 @@
   "pk": 27,
   "fields": {
     "product": 26,
-    "image": "products_pictures/th_TuoQjin.jpeg"
+    "image": "products_pictures/zanahoria.jpeg"
   }
 },
 {
@@ -536,7 +544,7 @@
   "pk": 28,
   "fields": {
     "product": 27,
-    "image": "products_pictures/th_kVVrjpR.jpeg"
+    "image": "products_pictures/lentejas.webp"
   }
 },
 {
@@ -544,7 +552,7 @@
   "pk": 29,
   "fields": {
     "product": 28,
-    "image": "products_pictures/th_SlLpvpX.jpeg"
+    "image": "products_pictures/yogurtNatural.jpeg"
   }
 },
 {
@@ -552,7 +560,7 @@
   "pk": 30,
   "fields": {
     "product": 29,
-    "image": "products_pictures/th_0hHMOSp.jpeg"
+    "image": "products_pictures/costiollaCerdo.jpeg"
   }
 },
 {
@@ -560,7 +568,7 @@
   "pk": 31,
   "fields": {
     "product": 30,
-    "image": "products_pictures/th_4BO54m7.jpeg"
+    "image": "products_pictures/JAMON-DE-CERDO-CON-CORDERO-enriko.jpg"
   }
 },
 {
@@ -568,7 +576,7 @@
   "pk": 32,
   "fields": {
     "product": 31,
-    "image": "products_pictures/th_rsMnqNZ.jpeg"
+    "image": "products_pictures/panQueso.jpeg"
   }
 },
 {
@@ -576,7 +584,7 @@
   "pk": 33,
   "fields": {
     "product": 32,
-    "image": "products_pictures/th_oLv3yft.jpeg"
+    "image": "products_pictures/miel.jpeg"
   }
 },
 {
@@ -584,7 +592,7 @@
   "pk": 34,
   "fields": {
     "product": 33,
-    "image": "products_pictures/th_4F3KyXz.jpeg"
+    "image": "products_pictures/kombucha.jpg"
   }
 },
 {
@@ -592,7 +600,7 @@
   "pk": 35,
   "fields": {
     "product": 34,
-    "image": "products_pictures/th_5zKy23i.jpeg"
+    "image": "products_pictures/arrozArganico.webp"
   }
 },
 {
@@ -600,7 +608,7 @@
   "pk": 36,
   "fields": {
     "product": 35,
-    "image": "products_pictures/th_9x68wHm.jpeg"
+    "image": "products_pictures/girasol.jpeg"
   }
 },
 {
@@ -608,7 +616,7 @@
   "pk": 37,
   "fields": {
     "product": 36,
-    "image": "products_pictures/th_7lltEkp.jpeg"
+    "image": "products_pictures/sombrero.webp"
   }
 },
 {
@@ -616,7 +624,7 @@
   "pk": 40,
   "fields": {
     "product": 37,
-    "image": "products_pictures/th_y3Tp6Mk.jpeg"
+    "image": "products_pictures/salsaAji2.webp"
   }
 },
 {
@@ -624,71 +632,7 @@
   "pk": 41,
   "fields": {
     "product": 37,
-    "image": "products_pictures/OIPworkbench.jpeg"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 42,
-  "fields": {
-    "product": 38,
-    "image": "products_pictures/Captura_de_pantalla_2025-03-18_013610.png"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 44,
-  "fields": {
-    "product": 40,
-    "image": "products_pictures/abobo.jpeg"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 45,
-  "fields": {
-    "product": 41,
-    "image": "products_pictures/abobo_RG4XZHO.jpeg"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 46,
-  "fields": {
-    "product": 41,
-    "image": "products_pictures/cba.jpg"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 47,
-  "fields": {
-    "product": 42,
-    "image": "products_pictures/papas.jpeg"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 48,
-  "fields": {
-    "product": 43,
-    "image": "products_pictures/carne.jpeg"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 49,
-  "fields": {
-    "product": 43,
-    "image": "products_pictures/cba_94q4FSZ.jpg"
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 50,
-  "fields": {
-    "product": 43,
-    "image": "products_pictures/cocinero.jpeg"
+    "image": "products_pictures/salsaAji1.webp"
   }
 },
 {
@@ -1619,7 +1563,7 @@
   "model": "users.customuser",
   "fields": {
     "password": "pbkdf2_sha256$870000$9zGYE3FOQKrknrjRZ3xw7h$Rap1dqtnsfd2//oZ6v31hKZzGsteLbdsc4GMkaHmqVU=",
-    "last_login": "2025-07-08T13:52:45.393Z",
+    "last_login": "2025-07-29T03:32:35.266Z",
     "is_superuser": true,
     "username": "Juan",
     "first_name": "",
@@ -1726,15 +1670,15 @@
   "model": "products.products",
   "pk": 3,
   "fields": {
-    "name": "Pl�tano Maduro",
-    "description": "Dulces pl�tanos perfectos para fritar o cocinar.",
+    "name": "Plátano Maduro",
+    "description": "Dulces plátanos perfectos para fritar o cocinar.",
     "price": "2000.00",
     "stock": 187,
     "unit_of_measure": "li",
     "producer": [
       "Angela2625"
     ],
-    "date_of_registration": "2025-07-11T12:29:59.628Z",
+    "date_of_registration": "2025-07-29T03:38:00.967Z",
     "state": "disponible",
     "category": [
       1
@@ -1897,7 +1841,7 @@
   "model": "products.products",
   "pk": 13,
   "fields": {
-    "name": "Salchich�n Antioque�o",
+    "name": "Salchichón Antioqueño",
     "description": "Embutido tradicional colombiano.",
     "price": "5000.00",
     "stock": 88,
@@ -1905,7 +1849,7 @@
     "producer": [
       "Juan"
     ],
-    "date_of_registration": "2025-06-24T02:26:58.971Z",
+    "date_of_registration": "2025-07-29T03:38:12.271Z",
     "state": "disponible",
     "category": [
       6
@@ -1935,7 +1879,7 @@
   "model": "products.products",
   "pk": 15,
   "fields": {
-    "name": "Pan Ali�ado",
+    "name": "Pan Aliñado",
     "description": "Pan tradicional colombiano con sabor suave.",
     "price": "1800.00",
     "stock": 150,
@@ -1943,7 +1887,7 @@
     "producer": [
       "Juan"
     ],
-    "date_of_registration": "2025-04-01T01:15:29.119Z",
+    "date_of_registration": "2025-07-29T03:38:36.110Z",
     "state": "disponible",
     "category": [
       8
@@ -2011,15 +1955,15 @@
   "model": "products.products",
   "pk": 19,
   "fields": {
-    "name": "Caf� Org�nico",
-    "description": "Caf� cultivado sin pesticidas, con sabor intenso.",
+    "name": "Café Orgánico",
+    "description": "Café cultivado sin pesticidas, con sabor intenso.",
     "price": "15000.00",
     "stock": 100,
     "unit_of_measure": "li",
     "producer": [
       "Juan"
     ],
-    "date_of_registration": "2025-04-01T01:19:32.104Z",
+    "date_of_registration": "2025-07-29T03:38:52.304Z",
     "state": "disponible",
     "category": [
       6
@@ -2030,7 +1974,7 @@
   "model": "products.products",
   "pk": 20,
   "fields": {
-    "name": "Semillas de Ch�a",
+    "name": "Semillas de Chía",
     "description": "Superalimento con omega 3 y fibra.",
     "price": "7000.00",
     "stock": 70,
@@ -2038,7 +1982,7 @@
     "producer": [
       "Juan"
     ],
-    "date_of_registration": "2025-04-01T01:20:19.860Z",
+    "date_of_registration": "2025-07-29T03:39:17.569Z",
     "state": "disponible",
     "category": [
       13
@@ -2049,15 +1993,15 @@
   "model": "products.products",
   "pk": 21,
   "fields": {
-    "name": "Artesan�a Wayuu",
-    "description": "Mochila tejida a mano por artesanos ind�genas.",
+    "name": "Artesanía Wayuu",
+    "description": "Mochila tejida a mano por artesanos indígenas.",
     "price": "80000.00",
     "stock": 50,
     "unit_of_measure": "unidad",
     "producer": [
       "Juan"
     ],
-    "date_of_registration": "2025-04-01T01:21:18.953Z",
+    "date_of_registration": "2025-07-29T03:39:07.426Z",
     "state": "disponible",
     "category": [
       14
@@ -2069,14 +2013,14 @@
   "pk": 22,
   "fields": {
     "name": "Planta de Albahaca",
-    "description": "Planta arom�tica fresca en maceta.",
+    "description": "Planta aromática fresca en maceta.",
     "price": "4500.00",
     "stock": 60,
     "unit_of_measure": "unidad",
     "producer": [
       "miguel"
     ],
-    "date_of_registration": "2025-04-01T01:36:33.980Z",
+    "date_of_registration": "2025-07-29T04:17:17.290Z",
     "state": "disponible",
     "category": [
       15
@@ -2106,7 +2050,7 @@
   "model": "products.products",
   "pk": 24,
   "fields": {
-    "name": "Lim�n Tahit�",
+    "name": "Limón Tahití",
     "description": "Limones frescos y jugosos.",
     "price": "2800.00",
     "stock": 100,
@@ -2114,7 +2058,7 @@
     "producer": [
       "miguel"
     ],
-    "date_of_registration": "2025-04-01T01:38:34.774Z",
+    "date_of_registration": "2025-07-29T03:37:44.606Z",
     "state": "disponible",
     "category": [
       1
@@ -2125,15 +2069,15 @@
   "model": "products.products",
   "pk": 25,
   "fields": {
-    "name": "Tomate de �rbol",
-    "description": "Fruta �cida ideal para jugos y postres.",
+    "name": "Tomate de árbol",
+    "description": "Fruta acida ideal para jugos y postres.",
     "price": "3200.00",
     "stock": 90,
     "unit_of_measure": "li",
     "producer": [
       "miguel"
     ],
-    "date_of_registration": "2025-04-01T01:39:05.503Z",
+    "date_of_registration": "2025-07-29T03:37:27.724Z",
     "state": "disponible",
     "category": [
       1
@@ -2164,14 +2108,14 @@
   "pk": 27,
   "fields": {
     "name": "Lentejas",
-    "description": "Legumbre rica en prote�na vegetal.",
+    "description": "Legumbre rica en proteína vegetal.",
     "price": "3500.00",
     "stock": 120,
     "unit_of_measure": "li",
     "producer": [
       "miguel"
     ],
-    "date_of_registration": "2025-04-01T01:40:12.370Z",
+    "date_of_registration": "2025-07-29T04:17:38.598Z",
     "state": "disponible",
     "category": [
       3
@@ -2183,14 +2127,14 @@
   "pk": 28,
   "fields": {
     "name": "Yogur Natural",
-    "description": "Yogur fresco sin az�car a�adido.(1 Litro)",
+    "description": "Yogur fresco sin azúcar añadido. (1 Litro)",
     "price": "4800.00",
     "stock": 100,
-    "unit_of_measure": "unidad",
+    "unit_of_measure": "l",
     "producer": [
       "miguel"
     ],
-    "date_of_registration": "2025-04-01T01:41:21.567Z",
+    "date_of_registration": "2025-07-29T04:18:11.939Z",
     "state": "disponible",
     "category": [
       4
@@ -2220,7 +2164,7 @@
   "model": "products.products",
   "pk": 30,
   "fields": {
-    "name": "Jam�n de Cerdo",
+    "name": "Jamón de Cerdo",
     "description": "Embutido suave y jugoso.",
     "price": "8000.00",
     "stock": 88,
@@ -2228,7 +2172,7 @@
     "producer": [
       "miguel"
     ],
-    "date_of_registration": "2025-06-23T01:13:25.573Z",
+    "date_of_registration": "2025-07-29T03:36:42.895Z",
     "state": "disponible",
     "category": [
       6
@@ -2258,7 +2202,7 @@
   "model": "products.products",
   "pk": 32,
   "fields": {
-    "name": "Miel de Ca�a",
+    "name": "Miel",
     "description": "Bebida vegetal nutritiva y refrescante. (500g)",
     "price": "5500.00",
     "stock": 100,
@@ -2266,7 +2210,7 @@
     "producer": [
       "oscar"
     ],
-    "date_of_registration": "2025-04-01T01:44:10.101Z",
+    "date_of_registration": "2025-07-29T03:36:30.419Z",
     "state": "disponible",
     "category": [
       10
@@ -2278,14 +2222,14 @@
   "pk": 33,
   "fields": {
     "name": "Kombucha de Frutos Rojos",
-    "description": "Bebida fermentada con probi�ticos naturales.(1 Litro)",
+    "description": "Bebida fermentada con probióticos naturales.(1 Litro)",
     "price": "10000.00",
     "stock": 70,
     "unit_of_measure": "unidad",
     "producer": [
       "oscar"
     ],
-    "date_of_registration": "2025-04-01T01:46:32.390Z",
+    "date_of_registration": "2025-07-29T04:18:33.584Z",
     "state": "disponible",
     "category": [
       11
@@ -2296,15 +2240,15 @@
   "model": "products.products",
   "pk": 34,
   "fields": {
-    "name": "Arroz Org�nico",
-    "description": "Org�nico\tArroz cultivado sin pesticidas ni qu�micos.",
+    "name": "Arroz Orgánico",
+    "description": "Orgánico\tArroz cultivado sin pesticidas ni químicos.",
     "price": "5500.00",
     "stock": 150,
     "unit_of_measure": "li",
     "producer": [
       "oscar"
     ],
-    "date_of_registration": "2025-04-01T01:47:10.520Z",
+    "date_of_registration": "2025-07-29T03:35:57.017Z",
     "state": "disponible",
     "category": [
       6
@@ -2316,14 +2260,14 @@
   "pk": 35,
   "fields": {
     "name": "Semillas de Girasol",
-    "description": "Snack saludable rico en prote�nas y grasas buenas.",
+    "description": "Snack saludable rico en proteínas y grasas buenas.",
     "price": "4000.00",
     "stock": 100,
     "unit_of_measure": "g",
     "producer": [
       "oscar"
     ],
-    "date_of_registration": "2025-04-01T01:47:43.890Z",
+    "date_of_registration": "2025-07-29T04:18:45.859Z",
     "state": "disponible",
     "category": [
       13
@@ -2335,14 +2279,14 @@
   "pk": 36,
   "fields": {
     "name": "Sombrero Vueltiao",
-    "description": "Artesan�a t�pica colombiana tejida a mano.",
+    "description": "Artesanía típica colombiana tejida a mano.",
     "price": "60000.00",
     "stock": 30,
     "unit_of_measure": "unidad",
     "producer": [
       "oscar"
     ],
-    "date_of_registration": "2025-04-01T01:48:18.544Z",
+    "date_of_registration": "2025-07-29T04:19:07.081Z",
     "state": "disponible",
     "category": [
       14
@@ -2353,7 +2297,7 @@
   "model": "products.products",
   "pk": 37,
   "fields": {
-    "name": "Salsa de Aj� Casera",
+    "name": "Salsa de Ají Casera",
     "description": "Picante artesanal con ingredientes naturales.",
     "price": "8000.00",
     "stock": 80,
@@ -2361,137 +2305,11 @@
     "producer": [
       "oscar"
     ],
-    "date_of_registration": "2025-04-01T01:49:22.664Z",
+    "date_of_registration": "2025-07-29T03:35:38.730Z",
     "state": "disponible",
     "category": [
       16
     ]
-  }
-},
-{
-  "model": "products.products",
-  "pk": 38,
-  "fields": {
-    "name": "sdfsdf",
-    "description": "sdfsdfsdf",
-    "price": "13.00",
-    "stock": 9,
-    "unit_of_measure": "ml",
-    "producer": [
-      "Juan"
-    ],
-    "date_of_registration": "2025-07-11T05:28:00.515Z",
-    "state": "disponible",
-    "category": [
-      12
-    ]
-  }
-},
-{
-  "model": "products.products",
-  "pk": 40,
-  "fields": {
-    "name": "gfgdfgfdg",
-    "description": "fgzdfgzdfgzdfgzdfgzdfgzdfgzdfgzdfg",
-    "price": "23232.00",
-    "stock": 32,
-    "unit_of_measure": "kg",
-    "producer": [
-      "Juan"
-    ],
-    "date_of_registration": "2025-07-10T05:14:00.447Z",
-    "state": "disponible",
-    "category": [
-      2
-    ]
-  }
-},
-{
-  "model": "products.products",
-  "pk": 41,
-  "fields": {
-    "name": "papaya",
-    "description": "esto' es una papaya",
-    "price": "3000.00",
-    "stock": 20,
-    "unit_of_measure": "kg",
-    "producer": [
-      "Juan"
-    ],
-    "date_of_registration": "2025-07-10T05:16:06.124Z",
-    "state": "disponible",
-    "category": [
-      1
-    ]
-  }
-},
-{
-  "model": "products.products",
-  "pk": 42,
-  "fields": {
-    "name": "prueba",
-    "description": "prueba123",
-    "price": "333.00",
-    "stock": 30,
-    "unit_of_measure": "kg",
-    "producer": [
-      "Juan"
-    ],
-    "date_of_registration": "2025-07-11T05:28:00.541Z",
-    "state": "disponible",
-    "category": [
-      1,
-      2
-    ]
-  }
-},
-{
-  "model": "products.products",
-  "pk": 43,
-  "fields": {
-    "name": "ksfughu",
-    "description": "fiusgdifugsdulifgliusd",
-    "price": "121.00",
-    "stock": 0,
-    "unit_of_measure": "kg",
-    "producer": [
-      "Juan"
-    ],
-    "date_of_registration": "2025-07-16T15:29:17.977Z",
-    "state": "disponible",
-    "category": [
-      1
-    ]
-  }
-},
-{
-  "model": "cart.shoppingcart",
-  "pk": 2,
-  "fields": {
-    "user": [
-      "Juan"
-    ],
-    "created_at": "2025-06-23T16:36:00.215Z"
-  }
-},
-{
-  "model": "cart.shoppingcart",
-  "pk": 3,
-  "fields": {
-    "user": [
-      "NestPrueba"
-    ],
-    "created_at": "2025-07-05T02:01:59.924Z"
-  }
-},
-{
-  "model": "cart.shoppingcart",
-  "pk": 4,
-  "fields": {
-    "user": [
-      "pruebaclase"
-    ],
-    "created_at": "2025-07-10T21:50:57.037Z"
   }
 },
 {
@@ -3368,34 +3186,6 @@
 },
 {
   "model": "invoices.detailinvoice",
-  "pk": 37,
-  "fields": {
-    "invoice": 23,
-    "product": 38,
-    "seller": [
-      "Juan"
-    ],
-    "quantity": 3,
-    "unit_price": "13.00",
-    "subtotal": "39.00"
-  }
-},
-{
-  "model": "invoices.detailinvoice",
-  "pk": 38,
-  "fields": {
-    "invoice": 23,
-    "product": 42,
-    "seller": [
-      "Juan"
-    ],
-    "quantity": 2,
-    "unit_price": "333.00",
-    "subtotal": "666.00"
-  }
-},
-{
-  "model": "invoices.detailinvoice",
   "pk": 39,
   "fields": {
     "invoice": 24,
@@ -4171,6 +3961,84 @@
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1Mzc5Njg5MiwiaWF0IjoxNzUzNzEwNDkyLCJqdGkiOiJmYzUyYWJjMjE4YzY0NDdhODkxNDU3OWE0OGZiYjVhZCIsInVzZXJfaWQiOjExfQ.2F6uAUlFKTFqNV1yHXaQji392SKzYdtYfHnU2I3Sp6k",
     "created_at": "2025-07-28T13:48:12.888Z",
     "expires_at": "2025-07-29T13:48:12Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 48,
+  "fields": {
+    "user": [
+      "Juan"
+    ],
+    "jti": "c74e578689e145eb820b265ea6dde321",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MzgwMTk5MCwiaWF0IjoxNzUzNzE1NTkwLCJqdGkiOiJjNzRlNTc4Njg5ZTE0NWViODIwYjI2NWVhNmRkZTMyMSIsInVzZXJfaWQiOjExfQ.m20bR2aw7QAIQTMtmLTUvGunU7mhLMPAPtvcsBUycfE",
+    "created_at": "2025-07-28T15:13:10.007Z",
+    "expires_at": "2025-07-29T15:13:10Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 49,
+  "fields": {
+    "user": [
+      "Juan"
+    ],
+    "jti": "834607807c4040c38cfac46991302632",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MzgwODAwNywiaWF0IjoxNzUzNzIxNjA3LCJqdGkiOiI4MzQ2MDc4MDdjNDA0MGMzOGNmYWM0Njk5MTMwMjYzMiIsInVzZXJfaWQiOjExfQ.AgY6VO7A2YJZdhYF_p8L7ZL-V1zpH-PiUd7viQvNWHo",
+    "created_at": "2025-07-28T16:53:27.281Z",
+    "expires_at": "2025-07-29T16:53:27Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 50,
+  "fields": {
+    "user": [
+      "Juan"
+    ],
+    "jti": "ebeb96e7f1c14f6a93f79e50e61f509d",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MzgxMTI0OSwiaWF0IjoxNzUzNzI0ODQ5LCJqdGkiOiJlYmViOTZlN2YxYzE0ZjZhOTNmNzllNTBlNjFmNTA5ZCIsInVzZXJfaWQiOjExfQ.R02AGaWuxe2p_kfidzDI-0_XVGZhGO5I8X3xzXX2krE",
+    "created_at": "2025-07-28T17:47:29.066Z",
+    "expires_at": "2025-07-29T17:47:29Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 51,
+  "fields": {
+    "user": [
+      "Juan"
+    ],
+    "jti": "622202440783404697071e7541d749ad",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MzgyNjAzOSwiaWF0IjoxNzUzNzM5NjM5LCJqdGkiOiI2MjIyMDI0NDA3ODM0MDQ2OTcwNzFlNzU0MWQ3NDlhZCIsInVzZXJfaWQiOjExfQ.ZsYo_fxHOX-Q4vik86gzQfdklqFYf1PlYzaIeCbdv9c",
+    "created_at": "2025-07-28T21:53:59.306Z",
+    "expires_at": "2025-07-29T21:53:59Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 52,
+  "fields": {
+    "user": [
+      "Juan"
+    ],
+    "jti": "bae36ef8f55c450aab6b12185e51e0fa",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MzgyOTg2MiwiaWF0IjoxNzUzNzQzNDYyLCJqdGkiOiJiYWUzNmVmOGY1NWM0NTBhYWI2YjEyMTg1ZTUxZTBmYSIsInVzZXJfaWQiOjExfQ.0nNO0vZubifY9CLg4SkZHjAf7_fdPW7NpW2SLVnMAyE",
+    "created_at": "2025-07-28T22:57:42.398Z",
+    "expires_at": "2025-07-29T22:57:42Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 53,
+  "fields": {
+    "user": [
+      "Juan"
+    ],
+    "jti": "23c42137c30d4611a1a0d1e60a14a406",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1Mzg0ODgzNCwiaWF0IjoxNzUzNzYyNDM0LCJqdGkiOiIyM2M0MjEzN2MzMGQ0NjExYTFhMGQxZTYwYTE0YTQwNiIsInVzZXJfaWQiOjExfQ.9uBfJrQsm-wTPkAoJqqa-qfnBsgPBovctoqy8jgaOtk",
+    "created_at": "2025-07-29T04:13:54.780Z",
+    "expires_at": "2025-07-30T04:13:54Z"
   }
 },
 {
@@ -7717,6 +7585,1122 @@
     "object_repr": "Productos Orgánicos y Agroecológicas",
     "action_flag": 2,
     "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 198,
+  "fields": {
+    "action_time": "2025-07-29T03:33:58.803Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "invoices",
+      "detailinvoice"
+    ],
+    "object_id": "37",
+    "object_repr": "3 x sdfsdf en factura #23",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 199,
+  "fields": {
+    "action_time": "2025-07-29T03:34:08.983Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "43",
+    "object_repr": "ksfughu",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 200,
+  "fields": {
+    "action_time": "2025-07-29T03:34:08.983Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "40",
+    "object_repr": "gfgdfgfdg",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 201,
+  "fields": {
+    "action_time": "2025-07-29T03:34:08.983Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "38",
+    "object_repr": "sdfsdf",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 202,
+  "fields": {
+    "action_time": "2025-07-29T03:34:23.448Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "invoices",
+      "detailinvoice"
+    ],
+    "object_id": "38",
+    "object_repr": "2 x prueba en factura #23",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 203,
+  "fields": {
+    "action_time": "2025-07-29T03:34:33.216Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "42",
+    "object_repr": "prueba",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 204,
+  "fields": {
+    "action_time": "2025-07-29T03:34:50.686Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "41",
+    "object_repr": "papaya",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 205,
+  "fields": {
+    "action_time": "2025-07-29T03:35:38.738Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "37",
+    "object_repr": "Salsa de Ají Casera",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 206,
+  "fields": {
+    "action_time": "2025-07-29T03:35:57.023Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "34",
+    "object_repr": "Arroz Orgánico",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\", \"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 207,
+  "fields": {
+    "action_time": "2025-07-29T03:36:30.424Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "32",
+    "object_repr": "Miel",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 208,
+  "fields": {
+    "action_time": "2025-07-29T03:36:42.901Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "30",
+    "object_repr": "Jamón de Cerdo",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 209,
+  "fields": {
+    "action_time": "2025-07-29T03:37:27.732Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "25",
+    "object_repr": "Tomate de árbol",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\", \"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 210,
+  "fields": {
+    "action_time": "2025-07-29T03:37:44.611Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "24",
+    "object_repr": "Limón Tahití",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 211,
+  "fields": {
+    "action_time": "2025-07-29T03:38:00.971Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "3",
+    "object_repr": "Plátano Maduro",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\", \"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 212,
+  "fields": {
+    "action_time": "2025-07-29T03:38:12.276Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "13",
+    "object_repr": "Salchichón Antioqueño",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 213,
+  "fields": {
+    "action_time": "2025-07-29T03:38:36.114Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "15",
+    "object_repr": "Pan Aliñado",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 214,
+  "fields": {
+    "action_time": "2025-07-29T03:38:52.309Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "19",
+    "object_repr": "Café Orgánico",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\", \"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 215,
+  "fields": {
+    "action_time": "2025-07-29T03:39:07.432Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "21",
+    "object_repr": "Artesanía Wayuu",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\", \"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 216,
+  "fields": {
+    "action_time": "2025-07-29T03:39:17.573Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "20",
+    "object_repr": "Semillas de Chía",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 217,
+  "fields": {
+    "action_time": "2025-07-29T03:42:02.199Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "3",
+    "object_repr": "Imagen de Manzana Roja",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 218,
+  "fields": {
+    "action_time": "2025-07-29T03:43:01.908Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "4",
+    "object_repr": "Imagen de Plátano Maduro",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 219,
+  "fields": {
+    "action_time": "2025-07-29T03:43:43.326Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "5",
+    "object_repr": "Imagen de Papa Criolla",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 220,
+  "fields": {
+    "action_time": "2025-07-29T03:44:22.406Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "6",
+    "object_repr": "Imagen de Cebolla Larga",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 221,
+  "fields": {
+    "action_time": "2025-07-29T03:46:04.833Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "7",
+    "object_repr": "Imagen de Frijol Cargamanto",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 222,
+  "fields": {
+    "action_time": "2025-07-29T03:46:56.289Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "8",
+    "object_repr": "Imagen de Arroz Integral",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 223,
+  "fields": {
+    "action_time": "2025-07-29T03:48:35.433Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "9",
+    "object_repr": "Imagen de Leche Entera",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 224,
+  "fields": {
+    "action_time": "2025-07-29T03:49:22.304Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "10",
+    "object_repr": "Imagen de Queso Campesino",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 225,
+  "fields": {
+    "action_time": "2025-07-29T03:50:36.279Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "11",
+    "object_repr": "Imagen de Carne de Res",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 226,
+  "fields": {
+    "action_time": "2025-07-29T03:51:19.710Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "12",
+    "object_repr": "Imagen de Pechuga de Pollo",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 227,
+  "fields": {
+    "action_time": "2025-07-29T03:52:08.664Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "14",
+    "object_repr": "Imagen de Salchichón Antioqueño",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 228,
+  "fields": {
+    "action_time": "2025-07-29T03:52:54.400Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "15",
+    "object_repr": "Imagen de Huevo de Gallina",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 229,
+  "fields": {
+    "action_time": "2025-07-29T03:53:32.445Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "16",
+    "object_repr": "Imagen de Pan Aliñado",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 230,
+  "fields": {
+    "action_time": "2025-07-29T03:54:40.750Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "17",
+    "object_repr": "Imagen de Miel de Abeja",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 231,
+  "fields": {
+    "action_time": "2025-07-29T03:55:29.762Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "18",
+    "object_repr": "Imagen de Jugo de Naranja Natural",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 232,
+  "fields": {
+    "action_time": "2025-07-29T03:56:13.217Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "19",
+    "object_repr": "Imagen de Cerveza Artesanal",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 233,
+  "fields": {
+    "action_time": "2025-07-29T03:57:22.021Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "20",
+    "object_repr": "Imagen de Café Orgánico",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 234,
+  "fields": {
+    "action_time": "2025-07-29T03:57:51.932Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "21",
+    "object_repr": "Imagen de Semillas de Chía",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 235,
+  "fields": {
+    "action_time": "2025-07-29T03:58:30.406Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "22",
+    "object_repr": "Imagen de Artesanía Wayuu",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 236,
+  "fields": {
+    "action_time": "2025-07-29T03:59:23.413Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "23",
+    "object_repr": "Imagen de Planta de Albahaca",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 237,
+  "fields": {
+    "action_time": "2025-07-29T04:00:12.635Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "24",
+    "object_repr": "Imagen de Mermelada de Mora",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 238,
+  "fields": {
+    "action_time": "2025-07-29T04:01:06.206Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "25",
+    "object_repr": "Imagen de Limón Tahití",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 239,
+  "fields": {
+    "action_time": "2025-07-29T04:01:55.272Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "26",
+    "object_repr": "Imagen de Tomate de árbol",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 240,
+  "fields": {
+    "action_time": "2025-07-29T04:02:35.273Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "27",
+    "object_repr": "Imagen de Zanahoria",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 241,
+  "fields": {
+    "action_time": "2025-07-29T04:03:05.736Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "28",
+    "object_repr": "Imagen de Lentejas",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 242,
+  "fields": {
+    "action_time": "2025-07-29T04:04:07.873Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "29",
+    "object_repr": "Imagen de Yogur Natural",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 243,
+  "fields": {
+    "action_time": "2025-07-29T04:04:39.497Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "30",
+    "object_repr": "Imagen de Costilla de Cerdo",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 244,
+  "fields": {
+    "action_time": "2025-07-29T04:05:39.533Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "31",
+    "object_repr": "Imagen de Jamón de Cerdo",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 245,
+  "fields": {
+    "action_time": "2025-07-29T04:06:09.566Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "32",
+    "object_repr": "Imagen de Pan de Queso",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 246,
+  "fields": {
+    "action_time": "2025-07-29T04:06:17.311Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "32",
+    "object_repr": "Imagen de Pan de Queso",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 247,
+  "fields": {
+    "action_time": "2025-07-29T04:06:59.255Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "33",
+    "object_repr": "Imagen de Miel",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 248,
+  "fields": {
+    "action_time": "2025-07-29T04:07:41.334Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "34",
+    "object_repr": "Imagen de Kombucha de Frutos Rojos",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 249,
+  "fields": {
+    "action_time": "2025-07-29T04:08:40.323Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "35",
+    "object_repr": "Imagen de Arroz Orgánico",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 250,
+  "fields": {
+    "action_time": "2025-07-29T04:09:19.766Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "36",
+    "object_repr": "Imagen de Semillas de Girasol",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 251,
+  "fields": {
+    "action_time": "2025-07-29T04:09:57.807Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "37",
+    "object_repr": "Imagen de Sombrero Vueltiao",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 252,
+  "fields": {
+    "action_time": "2025-07-29T04:11:06.772Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "40",
+    "object_repr": "Imagen de Salsa de Ají Casera",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 253,
+  "fields": {
+    "action_time": "2025-07-29T04:11:14.779Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "productimage"
+    ],
+    "object_id": "41",
+    "object_repr": "Imagen de Salsa de Ají Casera",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 254,
+  "fields": {
+    "action_time": "2025-07-29T04:17:17.296Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "22",
+    "object_repr": "Planta de Albahaca",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 255,
+  "fields": {
+    "action_time": "2025-07-29T04:17:38.606Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "27",
+    "object_repr": "Lentejas",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 256,
+  "fields": {
+    "action_time": "2025-07-29T04:18:11.943Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "28",
+    "object_repr": "Yogur Natural",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\", \"Unit of measure\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 257,
+  "fields": {
+    "action_time": "2025-07-29T04:18:33.590Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "33",
+    "object_repr": "Kombucha de Frutos Rojos",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 258,
+  "fields": {
+    "action_time": "2025-07-29T04:18:45.864Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "35",
+    "object_repr": "Semillas de Girasol",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 259,
+  "fields": {
+    "action_time": "2025-07-29T04:19:07.086Z",
+    "user": [
+      "Juan"
+    ],
+    "content_type": [
+      "products",
+      "products"
+    ],
+    "object_id": "36",
+    "object_repr": "Sombrero Vueltiao",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
   }
 }
 ]
