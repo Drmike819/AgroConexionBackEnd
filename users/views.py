@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer
+from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer, RegisterGroupSerializer
 # Create your views here.
 
 # Vista para el registro de usuarios
@@ -33,6 +33,31 @@ class RegisterView(generics.CreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+# Vista  que nos permite registrar una agrupacion
+class RegisterGroupView(APIView):
+    # Indcamos el permiso que pide la vista
+    permission_classes = [AllowAny]
+
+    # Metodo post para crear al usuario
+    def post(self, request, *args, **kwargs):
+        # Indicamos el serializador a utilizar
+        serializer = RegisterGroupSerializer(data=request.data)
+
+        # Verificamos que el serializador se avalido
+        if serializer.is_valid():
+            # Creamos la agrupacion
+            user = serializer.save()
+            # Enviamos mensaje de exito
+            return Response({
+                "message": "Agrupación registrada exitosamente.",
+                "username": user.username,
+                "email": user.email,
+                "user_type": user.user_type,
+            }, status=status.HTTP_201_CREATED)
+        # Si no es valido enviamos mensaje de error
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # vista para el manejo del login del usuario, este por su clase heredada ya maneja el tema de los TOKENS
 class LoginView(TokenObtainPairView):
     # indicamos el permiso que requiera la VIEW en este caso no necesita autenticacion
@@ -51,6 +76,7 @@ class LoginView(TokenObtainPairView):
         return Response({"fields": fields})
 
 
+#
 class LogoutView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
