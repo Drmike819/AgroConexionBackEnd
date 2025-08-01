@@ -83,7 +83,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 # Serializer para obtener los campos de modelo de agrupacion
 class GroupProfileSerializer(serializers.ModelSerializer):
     class Meta:
+        # Obtenemos el modelo a autilizar
         model = GroupProfile
+        # Indicamos los campos que solicitaremos
         fields = [
             'nit',
             'organization_type',
@@ -183,9 +185,55 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'userName': user.username,
             'userEmail': user.email,
             'isSeller': user.is_seller,
-            'isBuyer': user.is_buyer,
         })
 
         # Retornamos los datos junto con los tokens y la información del usuario
         return data
 
+
+# Serializer para actualizar los datos del usuario
+class UserUpdateSerializer(serializers.ModelSerializer):
+    # Obtenemos el serializador de las Grupaciones y le indicamos que no es requerido
+    group_profile = GroupProfileSerializer(required=False)
+    
+    class Meta:
+        # Indicamos el modelo a utilizar
+        model = CustomUser
+        # Campos que solicitaremos
+        fields = [
+            'username',
+            'email',
+            'phone_number',
+            'address',
+            'profile_image',
+            'is_seller',
+            'group_profile',
+        ]
+        extra_kwargs = {
+            'username': {'required': False},
+            'email': {'required': False},
+        } 
+    
+    # Funcion que permite actualizar a el usuario
+    def update(self, instance, validated_data):
+        # Verificamos si el usuario es una agrupacion y obtenemos al informacion en caso de que no lo sea se retorna un none
+        group_data = validated_data.pop('group_profile', None)
+        
+        # Recorremos cada campo y le asignamos el valor 
+        for attr, value in validated_data.items():
+            # Asignamos los valores a la instancia
+            setattr(instance, attr, value)
+        # Guardamos la instancia
+        instance.save()
+        
+        # Verificamos si el group_data existe y lo agregamos a la instancia
+        if group_data and hasattr(instance, 'group_profile'):
+            group_instance = instance.group_profile
+            # Recorremso los valores de group_data y asiganamos su informacion
+            for attr, value in group_data.items():
+                setattr(instance, attr, value)
+            # Guardamos la instancia
+            group_instance.save()
+        
+        # Retornamos el el objeto actualizado
+        return instance

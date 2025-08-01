@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer, RegisterGroupSerializer
+from .serializer import RegisterUserSerializer, CustomTokenObtainPairSerializer, RegisterGroupSerializer, UserUpdateSerializer
 # Create your views here.
 
 # Vista para el registro de usuarios
@@ -76,20 +76,55 @@ class LoginView(TokenObtainPairView):
         return Response({"fields": fields})
 
 
-#
+# Vista para cerrar sesion
 class LogoutView(APIView):
+    # Permisos de autentificacion y de acceso a la vista
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    # Metodo post
     def post(self, request):
+        # Obtenemos el refresh token del usuario
         refresh_token = request.data.get("refresh")
 
+        # Si no lo encontramos
         if not refresh_token:
             return Response({"detail": "Refresh token requerido."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            # En caso de obtener el token lo enviaomos a la lista negra
             token = RefreshToken(refresh_token)
             token.blacklist()
+            # Enviamos mensaje de exito
             return Response({"detail": "Sesión cerrada exitosamente."}, status=status.HTTP_200_OK)
         except TokenError:
+            # Mensaje de error
             return Response({"detail": "Token inválido o ya expirado."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Vista que em permite actualizar la informacion del usuario
+class UserUpdateView(APIView):
+    # Permisos de autentificacion y de acceso a la vista
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def put(sel, request):
+        # Obtenemos al usuario que envio la peticion
+        user =  request.user
+        # Obtenemos el serializador enviando a le usuario, la informacion a actualizar y indicamos que no requerimos todos los campos
+        serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+        
+        # Verificamos que el serializador sea valido 
+        if serializer.is_valid():
+            # Y guardamos la informacion
+            serializer.save()
+            # Mensjae de exito
+            return Response({
+                "message": "Usuario actualizado correctamente",
+                "user": serializer.data
+            }, status=status.HTTP_200_OK)
+        # Mensaje de error
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    

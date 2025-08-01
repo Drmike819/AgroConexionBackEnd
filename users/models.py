@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
     # Dirección del usuario
     address = models.TextField(max_length=500, null=True, blank=True)
     # Imagen de perfil
-    profile_image = models.ImageField(upload_to="profile_pictures/", blank=True, null=True, default='profile_pictures/perfil.jpeg')
+    profile_image = models.ImageField(upload_to="profile_pictures/", blank=True, null=True, default='media/profile_pictures/perfil.jpeg')
     
     USER_TYPE_CHOICES = [
         ('common', 'Usuario común'),
@@ -37,8 +37,7 @@ class CustomUser(AbstractUser):
         return self.username
     
     
-    
-
+# Modelo para garegar informacion si el usuario es una agrupacion 
 class GroupProfile(models.Model):
     # Usuario asociado 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='group_profile')
