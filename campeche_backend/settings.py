@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # permite la conexion de diferentes dominios
     'corsheaders',
-    # libreria que nos permite crear apis
+    # libreria que nos permite crear APIS
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -144,11 +144,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # especificamos los dominios que tienen permitido hacer peticiones
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://localhost:3000',
 ]
+
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -162,18 +164,19 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
+
 # inidcamos que el modelo por defecto del usuario va a h¿ser el customisado
 AUTH_USER_MODEL = 'users.CustomUser'
 
-import os
 
+import os
 # Ruta donde se guardarán los archivos multimedia (imágenes, videos, etc.)
 MEDIA_URL = '/media/'  # La URL para acceder a los archivos multimedia
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # El directorio en el que se guardarán los archivos multimedia
 
+
 # Configuración de JWT
 from datetime import timedelta
-
 # definimos los tiempos de lo stokens
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -183,3 +186,14 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_BLACKLIST_ENABLED': True,
 }
+
+
+# Configuracion para enviar los correos
+from decouple import config
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = config("EMAIL_HOST_USER")

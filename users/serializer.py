@@ -1,15 +1,9 @@
 from rest_framework import serializers
-from .models import CustomUser, GroupProfile
-
-# from rest_framework.response import Response
-# from rest_framework import status
-# from django.core.exceptions import ValidationError
-# from django.contrib.auth import authenticate
-# from django.contrib.auth.password_validation import validate_password
-
+from .models import CustomUser, GroupProfile, EmailVerificationToken
+from .utils.email_service import EmailService
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
 import re 
+
 
 # Serializador de registro
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -63,6 +57,8 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         # validate_password(password)
         # retornados la informacion
         return data
+    
+    
     # funcion para crear un usuario
     def create(self, validated_data):
         """
@@ -75,10 +71,22 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         user = CustomUser.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
-            password=validated_data['password']
+            password=validated_data['password'],
+            is_active=False
         )
+        
+        # Crea mensaje y token para verificar la cuenta
+        token_obj = EmailVerificationToken.create_token(user, 'account_verification', use_code=True)
+        EmailService.send_email(
+            "Confirma tu cuenta",
+            f"Tu código de verificación es: {token_obj.code}\n\n"
+            "Ingresa este código en la página de verificación para activar tu cuenta.",
+            [user.email]
+        )
+        
         # retorna el usuario creado
         return user
+
 
 # Serializer para obtener los campos de modelo de agrupacion
 class GroupProfileSerializer(serializers.ModelSerializer):
@@ -158,15 +166,23 @@ class RegisterGroupSerializer(serializers.ModelSerializer):
             address=validated_data.get('address'),
             profile_image=validated_data.get('profile_image'),
             user_type='group',  # Forzar que sea agrupación
+            is_active=False
         )
 
         # Creamos la informacion adicional de la agrupacion
         GroupProfile.objects.create(user=user, **group_data)
-
-        # Retornamos al usuario
-        return user
-    
         
+        # Creamos mensaje y token para confirmar la cuenta
+        token_obj = EmailVerificationToken.create_token(user, 'account_verification', use_code=True)
+        EmailService.send_email(
+            "Confirma tu cuenta",
+            f"Tu código de verificación es: {token_obj.code}\n\n"
+            "Ingresa este código en la página de verificación para activar tu cuenta.",
+            [user.email]
+        )
+        return user
+
+          
 # Serializador personalizado para manejar tokens de autenticación
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
@@ -237,3 +253,37 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         
         # Retornamos el el objeto actualizado
         return instance
+    
+    
+# Serializador para cambiar la contraseña
+class ConfirmPasswordChangeSerializer(serializers.Serializer):
+    code = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    new_password2 = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        # Coincidencia
+        if data['new_password'] != data['new_password2']:
+            raise serializers.ValidationError({"new_password": "Las contraseñas no coinciden."})
+
+        # Longitud mínima
+        if len(data['new_password']) <= 8:
+            raise serializers.ValidationError({"new_password": "La contraseña es muy corta."})
+
+        # Mayúscula
+        if not re.search(r'[A-Z]', data['new_password']):
+            raise serializers.ValidationError({"new_password": "Debe contener al menos una letra mayúscula."})
+
+        # Minúscula
+        if not re.search(r'[a-z]', data['new_password']):
+            raise serializers.ValidationError({"new_password": "Debe contener al menos una letra minúscula."})
+
+        # Número
+        if not re.search(r'\d', data['new_password']):
+            raise serializers.ValidationError({"new_password": "Debe contener al menos un número."})
+
+        # Carácter especial
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', data['new_password']):
+            raise serializers.ValidationError({"new_password": "Debe contener al menos un carácter especial."})
+
+        return data

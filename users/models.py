@@ -1,5 +1,12 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+# Modulo para crear identificadores unicos 
+import uuid
+# Manejo de horarios y tiempos dependiendo de la zona horaria
+from django.utils import timezone
+# permite sumar o restar intervalos de tiempo a objetos de fecha y hora.
+from datetime import timedelta
 # Create your models here.\
 
 
@@ -24,6 +31,7 @@ class CustomUser(AbstractUser):
     # Celular del usuario
     phone_number = models.CharField(max_length=10, blank=True, null=True)
     
+    two_factor_enabled = models.BooleanField(default=False)
     
 
     def save(self, *args, **kwargs):
@@ -62,3 +70,42 @@ class GroupProfile(models.Model):
     def __str__(self):
         return f"(Agrupación {self.user.username})"
 
+
+class EmailVerificationToken(models.Model):
+    # Lista de obpciones para idicar para que se utilizara el token
+    PURPOSE_CHOICES = [
+        ('account_verification', 'Account Verification'),
+        ('two_factor', 'Two Factor Auth'),
+        ('password_change', 'Password Change'),
+        ('password_reset', 'Password Reset'),
+    ]
+    # Indicamos la union de los tokens al usuario
+    user = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
+    # Campo de generacion de tpken, este no se podra repetir y tampoco modificar
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # Codigo para verificar en dos pasos
+    code = models.CharField(max_length=6, null=True, blank=True)  # PIN numérico opcional
+    # Indicaodr de utilidad del token
+    purpose = models.CharField(max_length=50, choices=PURPOSE_CHOICES)
+    # Fecha y horta de creacion
+    created_at = models.DateTimeField(auto_now_add=True)
+    # Fecha y hora de expiracion del token
+    expires_at = models.DateTimeField()
+
+    # Verificacion de expiracion del token
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+
+    # Metodo para crear el token del usuario
+    @classmethod
+    def create_token(cls, user, purpose, use_code=False, expire_minutes=15):
+        token_obj = cls(
+            user=user,
+            purpose=purpose,
+            expires_at=timezone.now() + timedelta(minutes=expire_minutes)
+        )
+        if use_code:
+            import random
+            token_obj.code = f"{random.randint(100000, 999999)}"
+        token_obj.save()
+        return token_obj
