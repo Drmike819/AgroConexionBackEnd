@@ -1,0 +1,17 @@
+Creacion de una factura
+    POST: http://127.0.0.1:8000/api/invoices/create/
+
+Obtenemos la lista de facturas de un usuario
+    GET: http://127.0.0.1:8000/api/invoices/list-invoice/
+
+Obtenemos una factura en concreto
+    GET: http://127.0.0.1:8000/api/invoices/detail/<int:id>/
+
+Comprar todo lo que xista en el carrito Creacion de factura
+    POST: http://127.0.0.1:8000/api/invoices/from-cart/
+
+Nos indica las estadisticas varias
+    GET: http://127.0.0.1:8000/api/invoices/stats/
+
+Devuelve los productos mas vendidos (5)
+    GET: http://127.0.0.1:8000/api/invoices/top-selling/

@@ -1,0 +1,35 @@
+Registrar a un usuario nuevo
+    POST: http://127.0.0.1:8000/api/users/register/
+
+Registrar a un usuario con la informacion de la agrupcion este tentra el estado de vendedor activo
+    POST: http://127.0.0.1:8000/api/users/group/register/
+
+Envia un correo con digo de sutentificacion para autenticar la cuenta
+    POST: http://127.0.0.1:8000/api/users/verify-account/
+
+Permite iniciar sesion al usuario
+    POST: http://127.0.0.1:8000/api/users/login/
+
+Permite iniciar sesion de dos pasos
+    POST: http://127.0.0.1:8000/api/users/login/step2/
+
+Permite al usuario activar la autentificacion en dos pasos
+    POST: http://127.0.0.1:8000/api/users/toggle-2fa/
+
+Cierre de sesion
+    POST: http://127.0.0.1:8000/api/users/logout/
+
+Actualiza los datos del usuario
+    POST: http://127.0.0.1:8000/api/users/update/
+
+Envia codigo de verificacion para cambiar la contraseñA
+    POST: http://127.0.0.1:8000/api/users/change-password/request/
+
+Permite cambiar la contraseña
+    POST: http://127.0.0.1:8000/api/users/change-password/confirm/
+
+Envia codigo de verificacion para cambio de contraseña en caso de el usuario pierda su contraseña
+    POST: http://127.0.0.1:8000/api/users/password-reset/request/
+
+Confirmacion de cambio de contraseña con el codigo
+    POST: http://127.0.0.1:8000/api/users/password-reset/confirm/

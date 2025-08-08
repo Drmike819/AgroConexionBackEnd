@@ -1,0 +1,35 @@
+Obtenemos las categorias
+    GET: http://127.0.0.1:8000/api/products/categories/
+
+Obtenemos los producto de una categoria en especifico
+    GET: http://127.0.0.1:8000/api/products/categories/<int:category_id>/
+
+Lista de todo los productos
+    GET: http://127.0.0.1:8000/api/products/list-products/
+
+Lista de los productos de un usuario en especifico
+    GET: http://127.0.0.1:8000/api/products/my-products/
+
+Obtener el la informacion de un producto en especifico
+    GET: http://127.0.0.1:8000/api/products/detail/<int:product_id>/
+
+Creacion de un producto nuevo
+    POST: http://127.0.0.1:8000/api/products/new-product/
+
+Edicion de un producto 
+    PUT: http://127.0.0.1:8000/api/products/edit-product/<int:product_id>/
+
+Eliminar un producto 
+    DELETE: http://127.0.0.1:8000/api/products/delete-product/<int:product_id>/
+
+Obtenemos los comentarios de un producto en especifico
+    GET: http://127.0.0.1:8000/api/products/comments/<int:product_id>/
+
+Crear un nuevo comentario
+    POST: http://127.0.0.1:8000/api/products/new-comment/
+
+Edicion de un comentario
+    PUT: http://127.0.0.1:8000/api/products/edit-comment/<int:comment_id>/
+
+Eliminar un comentario
+    DELETE: http://127.0.0.1:8000/api/products/delete-comment/<int:comment_id>/ 
