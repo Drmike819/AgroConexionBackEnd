@@ -1,8 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import SerializerCategories, SerializerProducts, SerializerCategoriesProducs
+from .serializer import (
+    SerializerCategories, 
+    SerializerProducts, SerializerCategoriesProducs, 
+    NewCommentsSerializers, EditCommentSerializer, CommentSerializer
+)
+
 from rest_framework.views import APIView
-from .models import Category, Products
+from .models import Category, Products, Comments
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -21,21 +26,41 @@ class CategoriesView(APIView):
         # retornamos la informacion del serializer (JSON)
         # print(serializer.data)
         return Response(serializer.data)
-    
-    
-# creacion de la (API) para obtener todas las categorias con sus productos
+
+
+# View en donde se muestran los productos de una categoria especifica
 class ProducsCategoriesView(APIView):
-    # indicamos los permisos que necesita la API
+    # Permisos de la clase
     permission_classes = [AllowAny]
-    # solicitud con el metodo get
-    def get(self, request, *args, **kwargs):
-        # nos devuel las instancias del todas las categorias
-        categories = Category.objects.all()
-        # convertimos las categorias en un formato JSON y inidcamo sque tendremos mas de una categoria
-        serializer = SerializerCategoriesProducs(categories, many=True)
-        # retornamos la informacion del serializer (JSON)
-        # print(serializer.data)
-        return Response(serializer.data)
+    
+    # Funcion en donde obtenemos a la categoria
+    def get_object(self, category_id):
+        try:
+            # Retornamos la categoria
+            return Category.objects.get(id=category_id)
+        except Category.DoesNotExist:
+            # Retornamos None
+            return None
+    
+    # Method GET
+    def get(self, request, category_id, *args, **kwargs):
+        # Obtenemos la categoria
+        category = self.get_object(category_id)
+        # Verificamos que la categoria exista
+        if not category:
+            return Response({'error': 'La categoria no a sido encontrada'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Obtenemos los productos cuya categoria sea la buscada
+        products = Products.objects.filter(category=category.id)
+        
+        # Verificamos que existan productos en esta categoria
+        if not products.exists():
+            return Response({'message': f'La categoria {category.name} no tiene productos asignados'})
+        
+        # Obtenemnos la data 
+        serializer = SerializerCategoriesProducs(category)
+        # Retornamos la informacion 
+        return Response(serializer.data, status=status.HTTP_200_OK)
         
 
 # creacion de la (API) para obtener todos los productos     
@@ -119,34 +144,12 @@ class DetailProductView(APIView):
 
 
 # creacion de la API para crear un nuevo producto
-class FormProductosView(APIView):
+class NewProductosView(APIView):
     
     # solo los usuraios con el token JWT pueden acceder a esta 
     authentication_classes = [JWTAuthentication]
     # indicamos que las personas autenticadas son los unicos que pueden acceder a esta
     permission_classes = [IsAuthenticated]
-
-    # con el metodo get enviamos los campos del formulario para la creacion de un nuevo producto
-    def get(self, request, *args, **kwargs):
-        # alamacenamos las opciones de unidad encontradas en el modelo
-        unit_choices = [{'value': key, 'label': value} for key, value in Products.UNIT_CHOICES]
-        # obtenemos todas las instacias creadas del modelo categorias 
-        categorias = Category.objects.all()
-        # obtenemos todos las categorias 
-        opciones_categorias = [{'value': categoria.id, 'label': categoria.name} for categoria in categorias]
-
-        # campos del formulario que deseamos utilizar para la creacion de una nuevo producto
-        fields = [
-            {"name": "name", "label": "Nombre del producto", "type": "text", "required": True},
-            {"name": "description", "label": "Descripción del producto", "type": "text", "required": True},
-            {"name": "price", "label": "Precio del producto", "type": "number", "step": "0.01", "required": True},
-            {"name": "stock", "label": "Cantidad disponible", "type": "number", "step": "1", "required": True},
-            {"name": "unit_of_measure", "label": "Unidad de medida", "type": "select", "options": unit_choices, "required": True},
-            {"name": "images", "label": "Imágenes del producto", "type": "file", "multiple": True, "required": False},
-            {"name": "category", "label": "Categoría", "type": "select", "options": opciones_categorias, "multiple": True, "required": True},
-        ]
-        # retornamos los campos
-        return Response({"fields": fields})
 
     # funcion que nos permite subir el producto a la base de datos
     def post(self, request, *args, **kwargs):
@@ -192,8 +195,8 @@ class FormProductosView(APIView):
         # mensaje de error
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Agregar esta vista a tu archivo views.py
 
+# View que permite editar un producto
 class EditProductView(APIView):
     # Solo los usuarios con token JWT pueden acceder
     authentication_classes = [JWTAuthentication]
@@ -209,47 +212,6 @@ class EditProductView(APIView):
             return Products.objects.get(id=product_id, producer=user)
         except Products.DoesNotExist:
             return None
-    
-    def get(self, request, product_id, *args, **kwargs):
-        """
-        Obtener los datos actuales del producto para pre-llenar el formulario de edición
-        """
-        # Obtenemos el producto verificando que sea del usuario logueado
-        product = self.get_object(product_id, request.user)
-        
-        if not product:
-            return Response(
-                {'detail': 'Producto no encontrado o no tienes permisos para editarlo'}, 
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        # Opciones para los campos select
-        unit_choices = [{'value': key, 'label': value} for key, value in Products.UNIT_CHOICES]
-        status_choices = [{'value': key, 'label': value} for key, value in Products.STATUS_CHOICES]
-        
-        # Obtenemos todas las categorías disponibles
-        categorias = Category.objects.all()
-        opciones_categorias = [{'value': categoria.id, 'label': categoria.name} for categoria in categorias]
-        
-        # Campos del formulario con los datos actuales del producto
-        fields = [
-            {"name": "name", "label": "Nombre del producto", "type": "text", "required": True, "value": product.name},
-            {"name": "description", "label": "Descripción del producto", "type": "text", "required": True, "value": product.description},
-            {"name": "price", "label": "Precio del producto", "type": "number", "step": "0.01", "required": True, "value": str(product.price)},
-            {"name": "stock", "label": "Cantidad disponible", "type": "number", "step": "1", "required": True, "value": product.stock},
-            {"name": "unit_of_measure", "label": "Unidad de medida", "type": "select", "options": unit_choices, "required": True, "value": product.unit_of_measure},
-            {"name": "state", "label": "Estado del producto", "type": "select", "options": status_choices, "required": True, "value": product.state},
-            {"name": "images", "label": "Nuevas imágenes del producto", "type": "file", "multiple": True, "required": False},
-            {"name": "category", "label": "Categoría", "type": "select", "options": opciones_categorias, "multiple": True, "required": True, "value": list(product.category.values_list('id', flat=True))},
-        ]
-        
-        # Serializamos el producto actual para obtener toda su información
-        serializer = SerializerProducts(product)
-        
-        return Response({
-            "fields": fields,
-            "current_product": serializer.data
-        })
     
     def put(self, request, product_id, *args, **kwargs):
         """
@@ -370,3 +332,127 @@ class DeleteProductView(APIView):
             {'detail': f'Producto "{product_name}" eliminado correctamente'}, 
             status=status.HTTP_200_OK
         )
+        
+ 
+# View que nos permite crear un nuevo comentario    
+class NewCommentView(APIView):
+    # Solo los usuarios con token JWT pueden acceder
+    authentication_classes = [JWTAuthentication]
+    # Solo usuarios autenticados pueden acceder
+    permission_classes = [IsAuthenticated]
+    
+    # Methdo POST
+    def post(self, request, *args, **kwargs):
+        # Obtenemos el serializador y le pasamos la informacion de la peticion
+        serializer = NewCommentsSerializers(data=request.data, context={"request":request})
+        # Validamos el serializador
+        serializer.is_valid(raise_exception=True)
+        # Guardamos la instancia creada
+        comment = serializer.save()
+
+        # Retornar respuesta
+        return Response({"message": f"Se añadio correctamente el commentario al producto: {comment.product.name}"}, status=status.HTTP_201_CREATED)
+    
+
+# View que nos permite editar un comentario
+class EditCommentView(APIView):
+    # Solo los usuarios con token JWT pueden acceder
+    authentication_classes = [JWTAuthentication]
+    # Solo usuarios autenticados pueden acceder
+    permission_classes = [IsAuthenticated] 
+    
+    # funcion que nos permite Obtener el comentario 
+    def get_object(self, comment_id, user):
+        
+        try:
+            # Retornamos el comentario
+            return Comments.objects.get(id=comment_id, user=user)
+        except Comments.DoesNotExist:
+            # En caso de no encontrarlo retornamos None
+            return None   
+        
+    # Method PUT
+    def put(self, request, comment_id, *args, **kwargs):
+        # Guardamos la repuesta de la funcion
+        comment = self.get_object(comment_id, request.user)
+        # Verificamos que exista el comentario
+        if not comment:
+            return Response({"error": "Comentario no encontrado o no tienes permiso para editarlo."}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Obtenemos el serializador y le pasamos la informacion
+        serializer = EditCommentSerializer(comment, data=request.data, context={"request": request}, partial=True)
+        # Validamos el serializador
+        serializer.is_valid(raise_exception=True)
+        # Guardamos el comentario editado
+        edit_comment = serializer.save()
+
+        return Response({"message": f"Comentario del producto '{edit_comment.product.name}' actualizado correctamente."}, status=status.HTTP_200_OK)
+    
+
+# View quenos permite eliminar un comentario
+class DeleteCommnetView(APIView):
+    # Solo los usuarios con token JWT pueden acceder
+    authentication_classes = [JWTAuthentication]
+    # Solo usuarios autenticados pueden acceder
+    permission_classes = [IsAuthenticated] 
+    
+    # Funcion que nos permite obtener el comentario
+    def get_object(self, comment_id, user):
+        
+        try:
+            # Retornamos el comentario
+            return Comments.objects.get(id=comment_id, user=user)
+        except Comments.DoesNotExist:
+            # Retornamos none
+            return None
+    
+    # Method DELETE
+    def delete(self, request, comment_id, *args, **kwargs):
+        # Obtenemos el comentario
+        commnet = self.get_object(comment_id, user=request.user)
+        # Validamos que el comentario exista
+        if not commnet:
+            return Response({"error": "Comentario no encontrado o no tienes permiso para editarlo."}, status=status.HTTP_404_NOT_FOUND)
+        # Eliminamos el comentario
+        commnet.delete()
+        # Respuesta de exito
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+# View que nos permite obtenero los comentarios de un usuario en concreto
+class CommentsProduct(APIView):
+    # Todos pueden acceder
+    permission_classes = [AllowAny]
+    
+    # Funcion que os permite obtener un producto en especifico
+    def get_object(self, product_id):
+        try:
+            # Obtenemos el producto y lo retornamos
+            return Products.objects.get(id=product_id)
+        except Products.DoesNotExist:
+            # Retornamos None
+            return None
+        
+    # Method GET
+    def get(self, request, product_id, *args, **kwargs):
+        # Obtenemos el producto
+        product = self.get_object(product_id)
+        # Veridicamso que el producto exista
+        if not product:
+            return Response({"error": "El producto no ha sido encontrado"})
+        
+        # Obtenemos lso comentarios del poroducto obtenido
+        comments_product = Comments.objects.filter(product=product.id)
+        
+        # Verificamos que axistan comentarios 
+        if not comments_product.exists():
+            return Response(
+                {'message': 'Este producto no tiene comentarios aun'}, 
+                status=status.HTTP_200_OK
+            )
+        # LLmamos al serializador para obtener la informacion
+        serializer = CommentSerializer(comments_product, many=True)
+        # Mensaje de exito
+        return Response(serializer.data, status=status.HTTP_200_OK)
+            
+        

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Products, ProductImage
+from .models import Category, Products, ProductImage, Comments, CommentsImage
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -8,7 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Products)
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "stock", "producer", "state")  # Muestra estos campos en la lista
+    list_display = ("id", "name", "price", "stock", "producer", "state")  # Muestra estos campos en la lista
     search_fields = ("name", "producer__username")  # Permite buscar por nombre de producto o productor
     list_filter = ("state", "category")  # Agrega filtros laterales por estado y categoría
     autocomplete_fields = ("producer",)  # Permite buscar el productor en un cuadro de autocompletado
@@ -17,3 +17,11 @@ class ProductsAdmin(admin.ModelAdmin):
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ("product", "image")
+    
+@admin.register(Comments)
+class CommentsAdmin(admin.ModelAdmin):
+    list_display = ("id", "comment")
+    
+@admin.register(CommentsImage)
+class CommentsImageAdmin(admin.ModelAdmin):
+    list_display = ("id","comment", "image")

@@ -71,6 +71,7 @@ class GroupProfile(models.Model):
         return f"(Agrupación {self.user.username})"
 
 
+# Modelo de creacionde los tokens o de codigo
 class EmailVerificationToken(models.Model):
     # Lista de obpciones para idicar para que se utilizara el token
     PURPOSE_CHOICES = [

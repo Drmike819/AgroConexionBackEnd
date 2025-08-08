@@ -1,5 +1,6 @@
 from django.db import models
 
+from users.models import CustomUser
 # Create your models here.
 
 # creacion del modelo para las categorias
@@ -62,6 +63,7 @@ class Products(models.Model):
     def __str__(self):
         return self.name
 
+
 # modelo que almacenara multiples imagenes para un producto
 class ProductImage(models.Model):
     # identidicador del producto
@@ -72,3 +74,22 @@ class ProductImage(models.Model):
     # retornamos el nombre del producto a la cuial pertenece la imagen
     def __str__(self):
         return f"Imagen de {self.product.name}"
+    
+
+#
+class Comments(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comment_user")
+    product = models.ForeignKey(Products, on_delete=models.Case, related_name='comment')
+    comment = models.TextField(null=False, blank=False)
+    
+    def __str__(self):
+        return f"el usuario {self.user.username} comento el producto {self.product.name} del productor {self.product.producer}"
+    
+
+#
+class CommentsImage(models.Model):
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="comments_pictures/", null=True, blank=True)
+
+    def __str__(self):
+        return f"Imagen del comentario {self.comment.comment}"
