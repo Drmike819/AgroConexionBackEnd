@@ -40,7 +40,7 @@ class FavoritesView(APIView):
             # Si es válido, guardamos el objeto asignando automáticamente el usuario autenticado
             serializer.save(user=request.user)
             # Retornamos la información del producto favorito creado
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         # Si los datos no son válidos, retornamos los errores
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -65,7 +65,7 @@ class FavoriteDeleteView(APIView):
             # Retornamos una respuesta de éxito sin contenido
             return Response(
                 {"detail": "Producto eliminado de favoritos correctamente."},
-                status=status.HTTP_204_NO_CONTENT
+                status=status.HTTP_200_OK
             )
         # Si no se encuentra el producto favorito, retornamos un error 404
         except FavoriteProducts.DoesNotExist:

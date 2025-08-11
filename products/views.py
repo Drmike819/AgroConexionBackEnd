@@ -1,13 +1,15 @@
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Count
 from .serializer import (
     SerializerCategories, 
     SerializerProducts, SerializerCategoriesProducs, 
-    NewCommentsSerializers, EditCommentSerializer, CommentSerializer
+    NewCommentsSerializers, EditCommentSerializer, CommentSerializer,
+    NewRatingProduct,
 )
 
 from rest_framework.views import APIView
-from .models import Category, Products, Comments
+from .models import Category, Products, Comments, Grades
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -412,11 +414,11 @@ class DeleteCommnetView(APIView):
         commnet = self.get_object(comment_id, user=request.user)
         # Validamos que el comentario exista
         if not commnet:
-            return Response({"error": "Comentario no encontrado o no tienes permiso para editarlo."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Comentario no encontrado o no tienes permiso para eliminarla"}, status=status.HTTP_404_NOT_FOUND)
         # Eliminamos el comentario
         commnet.delete()
         # Respuesta de exito
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message':'El comentario fue eliminado correctamente'},status=status.HTTP_200_OK)
     
 
 # View que nos permite obtenero los comentarios de un usuario en concreto
@@ -455,4 +457,85 @@ class CommentsProduct(APIView):
         # Mensaje de exito
         return Response(serializer.data, status=status.HTTP_200_OK)
             
+
+#
+class NewRatingView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = NewRatingProduct(data=request.data, context={"request": request})
+        if serializer.is_valid():
+            rating = serializer.save()
+            return Response(
+                {'message': f'Se ha calificado con éxito el producto {rating.product.name} con {rating.rating} estrellas.'},
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#
+class DeleteRatingView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self, grade_id, user):
+        try:
+            return Grades.objects.get(id=grade_id, user=user)
+        except Grades.DoesNotExist:
+            return None
+    def delete(self, request, grade_id, *args, **kwargs):
+        grade = self.get_object(grade_id, user=request.user)
+        if not grade:
+            return Response({"error": "Calificacion no encontrado o no tienes permiso para eliminarla"}, status=status.HTTP_404_NOT_FOUND)
+        # Eliminamos el comentario
+        grade.delete()
+        # Respuesta de exito
+        return Response({'message':'La calificacion fue eliminado correctamente'},status=status.HTTP_200_OK)
+
+
+#
+class EstatsGradesView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get_object(self, product_id):
+        try:
+            return Products.objects.get(id=product_id)
+        except Products.DoesNotExist:
+            return None
+    
+    def get(self, request, product_id, *args, **kwargs):
+        product = self.get_object(product_id)
+        
+        if not product:
+            return Response({"error": "El producto no ha sido encontrado"})
+        
+        ratings_data = (
+            Grades.objects
+            .filter(product=product_id)
+            .values("rating")
+            .annotate(count=Count("rating"))
+        )
+
+        # Calcular total
+        total_ratings = sum(item["count"] for item in ratings_data)
+
+        # Construir respuesta con 1 a 5 estrellas
+        stats = []
+        for star in range(1, 6):
+            count = next((item["count"] for item in ratings_data if item["rating"] == star), 0)
+            percentage = (count / total_ratings * 100) if total_ratings > 0 else 0
+            stats.append({
+                "star": star,
+                "count": count,
+                "percentage": round(percentage, 2)
+            })
+
+        return Response({
+            "product_id": product_id,
+            "total_ratings": total_ratings,
+            "stars": stats
+        }, status=status.HTTP_200_OK)
+        
         

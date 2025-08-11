@@ -1,4 +1,4 @@
-from .models import Category, Products, ProductImage, CommentsImage, Comments
+from .models import Category, Products, ProductImage, CommentsImage, Comments, Grades
 from rest_framework import serializers
 
 
@@ -185,3 +185,54 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = '__all__'
+        
+
+#
+class NewRatingProduct(serializers.ModelSerializer):
+    product = serializers.IntegerField()
+
+    class Meta:
+        model = Grades
+        fields = ['product', 'rating']
+
+    def validate(self, data):
+        request = self.context['request']
+
+        # Validar producto
+        product_id = data.get("product")
+        if not product_id:
+            raise serializers.ValidationError({"product": "Debe indicar un producto."})
+
+        try:
+            product = Products.objects.get(id=product_id)
+        except Products.DoesNotExist:
+            raise serializers.ValidationError({"product": "El producto no existe."})
+
+        # Validar rating
+        rating = data.get("rating")
+        if rating is None:
+            raise serializers.ValidationError({"rating": "Debe indicar su calificación."})
+        if rating < 1:
+            raise serializers.ValidationError({"rating": "La calificación no puede ser menor a 1."})
+        if rating > 5:
+            raise serializers.ValidationError({"rating": "La calificación no puede ser mayor a 5."})
+
+        # Reemplazar el ID por la instancia
+        data["product"] = product
+
+        return data
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        product = validated_data['product']  # Ahora sí es instancia de Products
+        rating = validated_data['rating']
+
+        # Crear o actualizar calificación
+        grade, created = Grades.objects.update_or_create(
+            user=user,
+            product=product,
+            defaults={'rating': rating}
+        )
+        return grade
+
+        return grade

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 from users.models import CustomUser
 # Create your models here.
@@ -93,3 +94,17 @@ class CommentsImage(models.Model):
 
     def __str__(self):
         return f"Imagen del comentario {self.comment.comment}"
+    
+
+#
+class Grades(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='rating_user')
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='rating_product')
+    rating = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Calificación'
+        verbose_name_plural = 'Calificaciones'
+
+    def __str__(self):
+        return f"{self.user} - {self.product} ({self.rating})"

@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     CategoriesView, ProducsCategoriesView, 
     ProducstView, DetailProductView, NewProductosView, EditProductView, DeleteProductView, UserProductsView, 
-    NewCommentView, EditCommentView, DeleteCommnetView, CommentsProduct
+    NewCommentView, EditCommentView, DeleteCommnetView, CommentsProduct,
+    NewRatingView, DeleteRatingView, EstatsGradesView
 )
 # url de la aplicacion (users)
 urlpatterns = [
@@ -21,4 +22,8 @@ urlpatterns = [
     path('new-comment/', NewCommentView.as_view(), name='nuevo_comentario'),
     path('edit-comment/<int:comment_id>/', EditCommentView.as_view(), name='editar_comentario'),
     path('delete-comment/<int:comment_id>/', DeleteCommnetView.as_view(), name='eliminar_comentario'),
+    
+    path('new-rating/', NewRatingView.as_view(), name='new_rating'),
+    path('delete-rating/<int:grade_id>/', DeleteRatingView.as_view(), name='delete_rating'),
+    path('stats_rating/<int:product_id>/', EstatsGradesView.as_view(), name='stats_rating'),
 ]

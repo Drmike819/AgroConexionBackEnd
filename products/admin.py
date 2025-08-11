@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Products, ProductImage, Comments, CommentsImage
+from .models import Category, Products, ProductImage, Comments, CommentsImage, Grades
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -25,3 +25,7 @@ class CommentsAdmin(admin.ModelAdmin):
 @admin.register(CommentsImage)
 class CommentsImageAdmin(admin.ModelAdmin):
     list_display = ("id","comment", "image")
+    
+@admin.register(Grades)
+class GradesAdmin(admin.ModelAdmin):
+    list_display = ("id", "rating")

@@ -33,3 +33,12 @@ Edicion de un comentario
 
 Eliminar un comentario
     DELETE: http://127.0.0.1:8000/api/products/delete-comment/<int:comment_id>/ 
+
+Permite darle una calificacion a un producto, tambien cambiar con el mismo metodo
+    POST: http://127.0.0.1:8000/api/products/new-rating/
+
+Elimina la calificacion de un producto 
+    DELETE: http://127.0.0.1:8000/api/products/delete-rating/<int:grade_id>/
+
+Obtenemos las estatadisticas de la calificacion de un producto en especifico
+    GET: http://127.0.0.1:8000/api/products/stats_rating/<int:product_id>/
