@@ -1,6 +1,8 @@
-from .models import Category, Products, ProductImage, CommentsImage, Comments, Grades
+from .models import Category, Products, ProductImage, CommentsImage, Comments, Grades, Offers
 from rest_framework import serializers
 
+from django.utils import timezone
+from datetime import timedelta
 
 # serializer para tener las categorias en archivo JSON(API)
 class SerializerCategories(serializers.ModelSerializer):
@@ -189,7 +191,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 #
 class NewRatingProduct(serializers.ModelSerializer):
-    product = serializers.IntegerField()
+    product = serializers.PrimaryKeyRelatedField(queryset=Products.objects.all())
 
     class Meta:
         model = Grades
@@ -224,7 +226,7 @@ class NewRatingProduct(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        product = validated_data['product']  # Ahora sí es instancia de Products
+        product = validated_data['product']
         rating = validated_data['rating']
 
         # Crear o actualizar calificación
@@ -235,4 +237,56 @@ class NewRatingProduct(serializers.ModelSerializer):
         )
         return grade
 
-        return grade
+
+#
+class NewOffert(serializers.ModelSerializer):
+    product = serializers.IntegerField()
+    
+    class Meta:
+        model = Offers
+        fields = ['product', 'title', 'description', 'percentage', 'start_date', 'end_date']
+    
+    def validate(self, data):
+        producto_id = data.get("product")
+        
+        if not producto_id:
+            raise serializers.ValidationError({"error": "El producto es necesario"})
+        
+        try:
+            product = Products.objects.get(id=producto_id)
+        except Products.DoesNotExist:
+            raise serializers.ValidationError({"product": "El producto no existe."})
+        
+        title = data.get("title")
+        if not title:
+            raise serializers.ValidationError({"error": "El titulo es obligatorio"})
+        
+        description = data.get("description")
+        if not description:
+            raise serializers.ValidationError({"error": "La descripcion es obligatorio"})
+        
+        percentage = data.get("percentage")
+        if percentage < 1 or percentage > 100:
+            raise serializers.ValidationError({"error": "El porcentaje de descuento debe estar entre 1 y 100."})
+
+        if percentage.as_tuple().exponent < -2:  
+            raise serializers.ValidationError({"error": "El porcentaje solo puede tener hasta dos decimales."})
+        
+        
+        start_date = data.get('start_date', timezone.now())
+        end_date = data.get('end_date')
+        
+        if start_date < timezone.now():
+            raise serializers.ValidationError({"error": "La fecha de inicio no puede ser menor a la fecha actual."})
+        
+        if end_date and end_date < start_date:
+            raise serializers.ValidationError({"error": "La fecha de fin no puede ser menor que la fecha de inicio."})
+        
+        # Reemplazar el ID por la instancia
+        data["product"] = product
+        return data
+        
+    def create(self, validate_data):
+        request = self.context['request']
+        user = self.context['request'].user
+        

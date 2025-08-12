@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
+from datetime import timedelta
 
 from users.models import CustomUser
 # Create your models here.
@@ -77,34 +79,69 @@ class ProductImage(models.Model):
         return f"Imagen de {self.product.name}"
     
 
-#
+# Modelo de comentarios
 class Comments(models.Model):
+    # Coneccion con el usuario
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comment_user")
+    # Coneccion con el producto a comentar
     product = models.ForeignKey(Products, on_delete=models.Case, related_name='comment')
+    # Campo de texto en donde se alamcenara el comentarioo
     comment = models.TextField(null=False, blank=False)
     
+    # Funcion que retorna un mensaje
     def __str__(self):
         return f"el usuario {self.user.username} comento el producto {self.product.name} del productor {self.product.producer}"
     
 
-#
+# Modelo para incluir imagenes a los comentario
 class CommentsImage(models.Model):
+    # Conexion con el comentario
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE, related_name="images")
+    # Campo en donde se alamcenara la imagen
     image = models.ImageField(upload_to="comments_pictures/", null=True, blank=True)
 
+    # Funcion que retorna un mensaje
     def __str__(self):
         return f"Imagen del comentario {self.comment.comment}"
     
 
-#
+# Modelo de calificacion del producto
 class Grades(models.Model):
+    # Campo en donde se lamacena el usuario que califico el prodcuto
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='rating_user')
+    # Producto al que se calificara
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='rating_product')
+    # Campo de calificacion
     rating = models.IntegerField(null=True, blank=True)
 
+    # Lo utilizamos para visualizarlo en el panel de administrador de django
     class Meta:
         verbose_name = 'Calificación'
         verbose_name_plural = 'Calificaciones'
 
+    # Funcion que retorna un mensaje
     def __str__(self):
         return f"{self.user} - {self.product} ({self.rating})"
+
+
+#
+class Offers(models.Model):
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="offers")
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name="offers")
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(default=lambda: timezone.now() + timedelta(days=7))
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Oferta"
+        verbose_name_plural = "Ofertas"
+
+    def is_active(self):
+        now = timezone.now()
+        return self.active and self.start_date <= now <= self.end_date
+
+    def __str__(self):
+        return f"{self.title} - {self.percentage}%"

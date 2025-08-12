@@ -36,13 +36,9 @@ class FavoritesView(APIView):
             context={'request': request}
         )
         # Validamos el serializador
-        if serializer.is_valid():
-            # Si es válido, guardamos el objeto asignando automáticamente el usuario autenticado
-            serializer.save(user=request.user)
-            # Retornamos la información del producto favorito creado
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        # Si los datos no son válidos, retornamos los errores
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        favorite = serializer.save()
+        return Response({"message": f"El producto {favorite.product.name} se agrego correctamente"}, status=status.HTTP_200_OK)
 
     
 # Vista que nos permite eliminar un producto de la lista de favoritos

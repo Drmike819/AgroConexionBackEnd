@@ -11,7 +11,19 @@ from .models import EmailVerificationToken, CustomUser
 from .utils.email_service import EmailService
 # Create your views here.
 
-# Vista para el registro de usuarios
+#  Vista que nos permite obtener la informacion del usuario logeado
+class CurrentUserView(APIView):
+    # Tipo de autentificacion solicitada
+    authentication_classes = [JWTAuthentication]
+    # Permiso de la VIEW
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserUpdateSerializer(request.user)
+        return Response(serializer.data)
+    
+    
+# Vista para el registro de usuarios   
 class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 

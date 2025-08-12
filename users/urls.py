@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    RegisterView, LogoutView, 
+    CurrentUserView, RegisterView, LogoutView, 
     RegisterGroupView, UserUpdateView, 
     VerifyAccountView, LoginView, LoginViewStep2, ToggleTwoFactorView,
     RequestPasswordChangeView, ConfirmPasswordChangeView, RequestPasswordResetView, ConfirmPasswordResetView
@@ -8,6 +8,7 @@ from .views import (
 # url de la aplicacion (users)
 urlpatterns = [
     # URLS
+    path('my-info/', CurrentUserView.as_view(), name='current-user'),
     path('register/', RegisterView.as_view(), name='register'),
     path('group/register/', RegisterGroupView.as_view(), name='register_group'),
     path('verify-account/', VerifyAccountView.as_view(), name='verify-account'),

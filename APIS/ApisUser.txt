@@ -1,3 +1,7 @@
+
+Permite obtener la informacion del usuario
+    GETT: http://127.0.0.1:8000/api/users/my-info/
+
 Registrar a un usuario nuevo
     POST: http://127.0.0.1:8000/api/users/register/
 

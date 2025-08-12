@@ -1,36 +1,43 @@
 from rest_framework import serializers
 from products.serializer import SerializerProducts
 from .models import FavoriteProducts, CartProducts, ShoppingCart
+from products.models import Products
 
 # Serializador para agregar un producto a favoritos
 class FavoriteProductsSerializer(serializers.ModelSerializer):
-    
-    # llamamos al serializador de los productos, esto nos ayuda a tener la informaciond e los productos favoritos
-    product = SerializerProducts(read_only=True)
-    
+    # Creacion del campo manual 
+    product = serializers.PrimaryKeyRelatedField(
+        # Validacion en donde verificamos que el id exista 
+        queryset=Products.objects.all(), write_only=True
+    )
+
+    # Indicamos los campos y el modelo a utilizar
     class Meta:
-        # Modelo que utilizaremos
         model = FavoriteProducts
-        # Campos que se incluirán en la serialización
-        fields = ['id', 'user', 'product', 'added_at']
-        # Indicamos que estos campos serán de solo lectura. 
-        # El cliente no podrá modificarlos directamente.
-        read_only_fields = ['id', 'user', 'added_at']
+        fields = ['product', 'added_at']
 
-    # Función que valida que el usuario no agregue el mismo producto dos veces a favoritos
-    def validate(self, attrs):
-        # Obtenemos el usuario autenticado desde el contexto (enviado desde la vista)
+    # Validacion del producto
+    def validate_product(self, value):
+        if not Products.objects.filter(pk=value.pk).exists():
+            raise serializers.ValidationError({"error":"El producto que intentas agregar no existe."})
+        return value
+    
+    # Validacion indentificacondo que el producto ya este en favoritos
+    def validate(self, data):
         user = self.context['request'].user
-        # Obtenemos el producto que el usuario desea agregar a favoritos
-        product = attrs.get('product')
+        product = data.get("product")
 
-        # Validamos que el producto no haya sido ya agregado por este usuario
         if FavoriteProducts.objects.filter(user=user, product=product).exists():
-            # Si ya existe, devolvemos un mensaje de error
-            raise serializers.ValidationError("Este producto ya está en tus favoritos.")
+            raise serializers.ValidationError({"message": "Este producto ya está en tus favoritos."})
 
-        # Si todo está bien, devolvemos los datos validados
-        return attrs
+        return data
+
+    # Crecion de la instancia
+    def create(self, validated_data):
+        validated_data["user"] = self.context['request'].user
+        favorite_instance = FavoriteProducts.objects.create(**validated_data)
+        return favorite_instance
+
 
 
 # Serializador para los productos en el carrito
