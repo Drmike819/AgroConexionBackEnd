@@ -29,6 +29,13 @@ class FavoritesView(APIView):
     
     # Método POST: permite agregar un nuevo producto a favoritos
     def post(self, request, *args, **kwargs):
+        data = request.data
+        
+        try:
+            Products.objects.get(id=data["product"])
+        except Products.DoesNotExist:
+            return Response({'error': 'El producto no existe'}, status=status.HTTP_400_BAD_REQUEST)
+            
         serializer = FavoriteProductsSerializer(
             # Enviamos los datos enviados por el cliente (product_id)
             data=request.data,

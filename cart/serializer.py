@@ -2,25 +2,28 @@ from rest_framework import serializers
 from products.serializer import SerializerProducts
 from .models import FavoriteProducts, CartProducts, ShoppingCart
 from products.models import Products
+from products.serializer import SerializerProducts
 
-# Serializador para agregar un producto a favoritos
+# Serializador para agregar un producto a favoritos        
 class FavoriteProductsSerializer(serializers.ModelSerializer):
     # Creacion del campo manual 
     product = serializers.PrimaryKeyRelatedField(
         # Validacion en donde verificamos que el id exista 
         queryset=Products.objects.all(), write_only=True
     )
+    
+    product_detail = SerializerProducts(source='product', read_only=True)
 
     # Indicamos los campos y el modelo a utilizar
     class Meta:
         model = FavoriteProducts
-        fields = ['product', 'added_at']
+        fields = ['product', 'product_detail', 'added_at']
 
     # Validacion del producto
-    def validate_product(self, value):
-        if not Products.objects.filter(pk=value.pk).exists():
+    def validate_product(self, data):
+        if not Products.objects.filter(pk=data.pk).exists():
             raise serializers.ValidationError({"error":"El producto que intentas agregar no existe."})
-        return value
+        return data
     
     # Validacion indentificacondo que el producto ya este en favoritos
     def validate(self, data):
