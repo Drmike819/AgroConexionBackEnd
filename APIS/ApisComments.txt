@@ -1,0 +1,11 @@
+Obtener lso producto de un producto en especifico
+    GET: http://127.0.0.1:8000/api/comments/product-comments/<int:product_id>/
+
+Crear unn nuevo comentario
+    POST: http://127.0.0.1:8000/api/comments/new-comment/
+
+Editar el comentario
+    PUT: http://127.0.0.1:8000/api/comments/edit-comment/<int:comment_id>/
+
+Eliminar el comentario
+    DELETE: http://127.0.0.1:8000/api/comments/delete-comment/<int:comment_id>/

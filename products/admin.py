@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Products, ProductImage, Comments, CommentsImage, Grades
+from .models import Category, Products, ProductImage, Grades, Offers
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -18,14 +18,10 @@ class ProductsAdmin(admin.ModelAdmin):
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ("product", "image")
     
-@admin.register(Comments)
-class CommentsAdmin(admin.ModelAdmin):
-    list_display = ("id", "comment")
-    
-@admin.register(CommentsImage)
-class CommentsImageAdmin(admin.ModelAdmin):
-    list_display = ("id","comment", "image")
-    
 @admin.register(Grades)
 class GradesAdmin(admin.ModelAdmin):
     list_display = ("id", "rating")
+    
+@admin.register(Offers)
+class OffersAdmin(admin.ModelAdmin):
+    list_display = ("id", "title")

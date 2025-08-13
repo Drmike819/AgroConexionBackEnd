@@ -13,6 +13,10 @@ class Category(models.Model):
     # descripcion de la categoria debe ser requerido
     description = models.TextField(blank=False, null=False)
     
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+    
     # retornamos en nombre de la categoria
     def __str__(self):
         return self.name
@@ -61,6 +65,10 @@ class Products(models.Model):
         if self.stock < 0:
             raise ValueError("El stock no puede ser negativo")
         super().save(*args, **kwargs)
+    
+    class Meta:
+        verbose_name = "Product"
+        verbose_name_plural = "Products"
         
     # retorna el nombre del producto
     def __str__(self):
@@ -73,36 +81,14 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name="images")
     # imagen del producto
     image = models.ImageField(upload_to="products_pictures/")
+    
+    class Meta:
+        verbose_name = "Image Product"
+        verbose_name_plural = "Images Products"
 
     # retornamos el nombre del producto a la cuial pertenece la imagen
     def __str__(self):
         return f"Imagen de {self.product.name}"
-    
-
-# Modelo de comentarios
-class Comments(models.Model):
-    # Coneccion con el usuario
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comment_user")
-    # Coneccion con el producto a comentar
-    product = models.ForeignKey(Products, on_delete=models.Case, related_name='comment')
-    # Campo de texto en donde se alamcenara el comentarioo
-    comment = models.TextField(null=False, blank=False)
-    
-    # Funcion que retorna un mensaje
-    def __str__(self):
-        return f"el usuario {self.user.username} comento el producto {self.product.name} del productor {self.product.producer}"
-    
-
-# Modelo para incluir imagenes a los comentario
-class CommentsImage(models.Model):
-    # Conexion con el comentario
-    comment = models.ForeignKey(Comments, on_delete=models.CASCADE, related_name="images")
-    # Campo en donde se alamcenara la imagen
-    image = models.ImageField(upload_to="comments_pictures/", null=True, blank=True)
-
-    # Funcion que retorna un mensaje
-    def __str__(self):
-        return f"Imagen del comentario {self.comment.comment}"
     
 
 # Modelo de calificacion del producto
@@ -116,8 +102,8 @@ class Grades(models.Model):
 
     # Lo utilizamos para visualizarlo en el panel de administrador de django
     class Meta:
-        verbose_name = 'Calificación'
-        verbose_name_plural = 'Calificaciones'
+        verbose_name = 'Rating'
+        verbose_name_plural = 'Grades'
 
     # Funcion que retorna un mensaje
     def __str__(self):
@@ -132,12 +118,12 @@ class Offers(models.Model):
     description = models.TextField(blank=True)
     percentage = models.DecimalField(max_digits=5, decimal_places=2)
     start_date = models.DateTimeField(default=timezone.now)
-    end_date = models.DateTimeField(default=lambda: timezone.now() + timedelta(days=7))
+    end_date = models.DateTimeField(default=timezone.now)
     active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Oferta"
-        verbose_name_plural = "Ofertas"
+        verbose_name = 'Offer'
+        verbose_name_plural = 'Offers'
 
     def is_active(self):
         now = timezone.now()

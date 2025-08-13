@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/products/', include('products.urls')),
     path('api/cart/', include('cart.urls')),
     path('api/invoices/', include('invoices.urls')),
-
+    path('api/comments/', include('comments.urls')),
 ]
 # Solo en modo de desarrollo, sirve los archivos multimedia.
 if settings.DEBUG:
