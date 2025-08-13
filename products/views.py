@@ -5,7 +5,6 @@ from .serializer import (
     SerializerCategories, 
     SerializerProducts, SerializerCategoriesProducs,
     NewRatingProductSerializer,
-    NewOffertSerializer,
 )
 
 from rest_framework.views import APIView
@@ -417,13 +416,3 @@ class EstatsGradesView(APIView):
         }, status=status.HTTP_200_OK)
         
 
-#
-class NewOffertView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = NewOffertSerializer(data=request.data, context={'request':request})
-        
-        serializer.is_valid(raise_exception=True)
-        
-        offer_instance = serializer.save()
-        
-        return Response({'message': f'La oferta creada al producto {offer_instance.product.name} ha sido creada con exito'}, status=status.HTTP_201_CREATED)

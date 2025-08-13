@@ -1,0 +1,2 @@
+Creacion de ua oferta
+    POST: http://127.0.0.1:8000/api/offers_and_coupons/new-offert/

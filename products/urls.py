@@ -3,7 +3,6 @@ from .views import (
     CategoriesView, ProducsCategoriesView, 
     ProducstView, DetailProductView, NewProductosView, EditProductView, DeleteProductView, UserProductsView,
     NewRatingView, DeleteRatingView, EstatsGradesView,
-    NewOffertView,
 )
 # url de la aplicacion (users)
 urlpatterns = [
@@ -22,5 +21,4 @@ urlpatterns = [
     path('delete-rating/<int:grade_id>/', DeleteRatingView.as_view(), name='delete_rating'),
     path('stats_rating/<int:product_id>/', EstatsGradesView.as_view(), name='stats_rating'),
     
-    path('new-offert/', NewOffertView.as_view(), name='new_offert'),
 ]
