@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Comments, CommentsImage
 from products.models import Products
-
+from users.models import CustomUser
 # Serializador que nos permite obtener las imagenes de los comentarios
 class CommentsImgesSerializer(serializers.ModelSerializer):
     
@@ -119,11 +119,16 @@ class EditCommentSerializer(serializers.ModelSerializer):
         # Retornamos el objeto actualizado
         return instance
     
-
+class CommentUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'username', 'profile_image']
+        
 # Serializer que nos permite imprimir la informacion de os comentarios con sus imagenes
 class CommentSerializer(serializers.ModelSerializer):
     # Obtenemos la images del serializador
     images = CommentsImgesSerializer(many=True, read_only=True)
+    user = CommentUserSerializer(read_only=True)
     # Indicamos el modelo a autilizar y sus campos
     class Meta:
         model = Comments
