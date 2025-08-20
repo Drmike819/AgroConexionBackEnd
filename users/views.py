@@ -119,7 +119,7 @@ class ToggleTwoFactorView(APIView):
 
         # Mensaje de error a la hora de activar o desactivar
         if enable_2fa is None:
-            return Response({"error": "Debe indicar si quiere activar o desactivar el 2FA."}, status=400)
+            return Response({"error": "Debe indicar si quiere activar o desactivar el 2FA."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Activa o desactiva la autenticacion
         request.user.two_factor_enabled = bool(enable_2fa)
@@ -172,7 +172,9 @@ class LoginView(APIView):
                 f"Tu código es: {token_obj.code}",
                 [user.email]
             )
-            return Response({"message": "Código enviado a tu correo."}, status=200)
+            return Response({"message": "Código enviado a tu correo.",
+                             "email": user.email,}
+                             ,status=200)
         # Mensaje de error si el usuario no existe
         except CustomUser.DoesNotExist:
             return Response({"error": "Usuario no encontrado"}, status=404)
@@ -288,7 +290,8 @@ class RequestPasswordChangeView(APIView):
             f"Tu código es: {token_obj.code}",
             [request.user.email]
         )
-        return Response({"message": "Código enviado a tu correo."})
+        return Response({"message": "Código enviado a tu correo.",
+                         "email": request.user.email}, status=status.HTTP_200_OK)
 
 
 # Vista que permite actualizar la contraseña

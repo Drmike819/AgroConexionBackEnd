@@ -22,7 +22,7 @@ Permite al usuario activar la autentificacion en dos pasos
 
 Cierre de sesion
     POST: http://127.0.0.1:8000/api/users/logout/
-
+ 
 Actualiza los datos del usuario
     PUT: http://127.0.0.1:8000/api/users/update/
 

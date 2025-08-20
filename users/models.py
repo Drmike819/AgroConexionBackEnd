@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     # Dirección del usuario
     address = models.TextField(max_length=500, null=True, blank=True)
     # Imagen de perfil
-    profile_image = models.ImageField(upload_to="profile_pictures/", blank=True, null=True, default='media/profile_pictures/perfil.jpeg')
+    profile_image = models.ImageField(upload_to="profile_pictures/", blank=True, null=True, default='/profile_pictures/perfil.jpeg')
     
     USER_TYPE_CHOICES = [
         ('common', 'Usuario común'),

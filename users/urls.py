@@ -11,6 +11,7 @@ urlpatterns = [
     path('my-info/', CurrentUserView.as_view(), name='current-user'),
     path('register/', RegisterView.as_view(), name='register'),
     path('group/register/', RegisterGroupView.as_view(), name='register_group'),
+    
     path('verify-account/', VerifyAccountView.as_view(), name='verify-account'),
     
     path('login/', LoginView.as_view(), name='login'),

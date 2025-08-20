@@ -58,26 +58,21 @@ class SerializerCategoriesProducs(serializers.ModelSerializer):
         fields = '__all__'
              
 
-#
+# Serializador para rear un calificacion a un producto
 class NewRatingProductSerializer(serializers.ModelSerializer):
+    # Campo para obtener el producto de la peticion
     product = serializers.PrimaryKeyRelatedField(queryset=Products.objects.all())
 
+    # Indicamos el modelo y los campos a utilizar
     class Meta:
         model = Grades
         fields = ['product', 'rating']
 
+    # Funcion que nos permite validar la informacion enviada
     def validate(self, data):
-        request = self.context['request']
-
-        # Validar producto
-        product_id = data.get("product")
-        if not product_id:
+        product = data.get("product")
+        if not product:
             raise serializers.ValidationError({"product": "Debe indicar un producto."})
-
-        try:
-            product = Products.objects.get(id=product_id)
-        except Products.DoesNotExist:
-            raise serializers.ValidationError({"product": "El producto no existe."})
 
         # Validar rating
         rating = data.get("rating")
@@ -88,11 +83,9 @@ class NewRatingProductSerializer(serializers.ModelSerializer):
         if rating > 5:
             raise serializers.ValidationError({"rating": "La calificación no puede ser mayor a 5."})
 
-        # Reemplazar el ID por la instancia
-        data["product"] = product
-
         return data
 
+    # Funcion que nos permite crear una nueva calificacion
     def create(self, validated_data):
         user = self.context['request'].user
         product = validated_data['product']

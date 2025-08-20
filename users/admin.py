@@ -8,7 +8,7 @@ class CustomUserAdmin(UserAdmin):
     # Agregar los campos que quieres que se muestren en la vista de lista
     list_display = ('username', 'email', 'is_seller', 'first_name', 'last_name', 'phone_number')
     search_fields = ('username', 'email', 'phone_number')  # Campos que se pueden buscar
-    list_filter = ('is_seller', )
+    list_filter = ('is_seller', 'two_factor_enabled')
 
     # Agregar campos que quieres que se muestren al editar un usuario
     fieldsets = (
@@ -19,7 +19,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('first_name', 'last_name', 'email', 'address', 'phone_number', 'profile_image')
         }),
         ('Permissions', {
-            'fields': ('is_seller', )
+            'fields': ('is_seller', 'two_factor_enabled')
         }),
     )
     # Para cambiar la vista de los campos cuando se crean o editan usuarios
@@ -29,7 +29,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'password1', 'password2')
         }),
         ('Personal Info', {
-            'fields': ('first_name', 'last_name', 'email', 'address', 'phone_number', 'profile_image')
+            'fields': ('first_name', 'last_name', 'email', 'address', 'phone_number', 'profile_image', 'two_factor_enabled')
         }),
         ('Permissions', {
             'fields': ('is_seller', )

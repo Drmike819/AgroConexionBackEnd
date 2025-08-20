@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Invoice, DetailInvoice
 from products.models import Products
-
+from offers_and_coupons.models import Coupon, UserCoupon
 # Serializador para verificar la información de cada producto solicitado en una factura
 class DetailProductSerializer(serializers.Serializer):
 
@@ -93,7 +93,7 @@ class InvoiceCreateSerializer(serializers.Serializer):
             product.save()
             
             # Sumamos el subtotal al total general
-            total += subtotal
+            total += subtotal      
 
         # Actualizamos el total de la factura
         invoice.total = total

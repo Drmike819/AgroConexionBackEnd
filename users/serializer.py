@@ -75,7 +75,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             is_active=False
         )
         
-        # Crea mensaje y token para verificar la cuenta
         token_obj = EmailVerificationToken.create_token(user, 'account_verification', use_code=True)
         EmailService.send_email(
             "Confirma tu cuenta",
@@ -83,7 +82,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             "Ingresa este código en la página de verificación para activar tu cuenta.",
             [user.email]
         )
-        
         # retorna el usuario creado
         return user
 

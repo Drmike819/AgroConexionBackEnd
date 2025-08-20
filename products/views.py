@@ -335,35 +335,45 @@ class DeleteProductView(APIView):
         )
        
 
-#
+# Vista que nos permite crear una calificacion aun producto
 class NewRatingView(APIView):
+    # Metodo y mpermisos de la vista
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    # Method POST
     def post(self, request, *args, **kwargs):
+        # Llamamos al serializador qu enos permitira validar losdatos
         serializer = NewRatingProductSerializer(data=request.data, context={"request": request})
+        # Validamos lel serializador
         if serializer.is_valid():
+            # Si todo esta bien guardamos y la calificacion
             rating = serializer.save()
             return Response(
                 {'message': f'Se ha calificado con éxito el producto {rating.product.name} con {rating.rating} estrellas.'},
                 status=status.HTTP_201_CREATED
             )
         else:
+            # Mensaje de error
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#
+# Vista quenos permite eliminar la calificacion de unproducto
 class DeleteRatingView(APIView):
+    # Indicamos los permisos de la vista
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+    # Obtenemos la calificacion del producto
     def get_object(self, grade_id, user):
         try:
             return Grades.objects.get(id=grade_id, user=user)
         except Grades.DoesNotExist:
             return None
+    # Methof DELETE
     def delete(self, request, grade_id, *args, **kwargs):
+        # Obtenemos al calificacion
         grade = self.get_object(grade_id, user=request.user)
+        # En caso de no obtenerla mandamos mensaje de error
         if not grade:
             return Response({"error": "Calificacion no encontrado o no tienes permiso para eliminarla"}, status=status.HTTP_404_NOT_FOUND)
         # Eliminamos el comentario
@@ -372,22 +382,23 @@ class DeleteRatingView(APIView):
         return Response({'message':'La calificacion fue eliminado correctamente'},status=status.HTTP_200_OK)
 
 
-#
+# Vista que nos permite agregar una calificacion
 class EstatsGradesView(APIView):
     permission_classes = [AllowAny]
-    
+    # Obtenemos el id del producto y retornamos el producto
     def get_object(self, product_id):
         try:
             return Products.objects.get(id=product_id)
         except Products.DoesNotExist:
             return None
-    
+    # Method GET
     def get(self, request, product_id, *args, **kwargs):
+        # Obtenemos el producto
         product = self.get_object(product_id)
-        
+        # En caso de no poderlo obtener enviamos mensaje de error
         if not product:
             return Response({"error": "El producto no ha sido encontrado"})
-        
+        # Obtenemos las calificacion del producto
         ratings_data = (
             Grades.objects
             .filter(product=product_id)
