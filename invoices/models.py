@@ -1,5 +1,5 @@
 from django.db import models
-
+from offers_and_coupons.models import Offers
 # Create your models here.
 
 # Creacion del modelo de la factura
@@ -37,6 +37,8 @@ class DetailInvoice(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     # Calculamos el precio dependiendo de la catidad a comprar y el precio del producto
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    offer = models.ForeignKey(Offers, on_delete=models.SET_NULL, null=True, blank=True, related_name="detail_invoices"
+    )
     # Mensaje que se vera en el admin
     def __str__(self):
         return f'{self.quantity} x {getattr(self.product, "name", "Producto")} en factura #{self.invoice_id}'

@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from .models import Invoice, DetailInvoice
 from products.models import Products
-from offers_and_coupons.models import Coupon, UserCoupon
+from offers_and_coupons.models import Offers, Coupon, UserCoupon
+from offers_and_coupons.serializer import OfferSerializer
+from django.utils import timezone
 # Serializador para verificar la información de cada producto solicitado en una factura
 class DetailProductSerializer(serializers.Serializer):
 
@@ -68,15 +70,24 @@ class InvoiceCreateSerializer(serializers.Serializer):
         for item in items:
             # Obtenemos la instancia del producto
             product = item['product']
-            
             # Obtenemos la cantidad comprada
             quantity = item['quantity']
             
             # Obtenemos el precio unitario del producto
             unit_price = product.price
+            subtotal = unit_price * quantity 
             
-            # Calculamos el subtotal del producto
-            subtotal = unit_price * quantity
+            offer = Offers.objects.filter(
+                product=product,
+                active=True,
+                start_date__lte=timezone.now(),
+                end_date__gte=timezone.now()
+            ).first()
+
+            if offer:
+                discount = (unit_price * offer.percentage) / 100
+                discounted_unit_price = unit_price - discount  
+                subtotal = discounted_unit_price * quantity
 
             # Creamos el detalle de factura
             DetailInvoice.objects.create(
@@ -85,7 +96,8 @@ class InvoiceCreateSerializer(serializers.Serializer):
                 product=product,
                 quantity=quantity,
                 unit_price=unit_price,
-                subtotal=subtotal
+                subtotal=subtotal,
+                offer=offer if offer else None
             )
 
             # Descontamos la cantidad comprada del stock del producto
@@ -108,12 +120,12 @@ class DetailInvoiceSerializer(serializers.ModelSerializer):
     # Creamos un campo nuevo en donde obtendremos el nombre del producto para no obtener toda la informacion del producto
     product_name = serializers.CharField(source='product.name')
     seller_name = serializers.CharField(source='seller.username', read_only=True)
-
+    offer = OfferSerializer(read_only=True)
     class Meta:
         # Indicamos le modelo a utilizar
         model = DetailInvoice
         # Indicamos los campos que obtenedremos en el JSON
-        fields = ['product_name', 'seller_name', 'quantity', 'unit_price', 'subtotal']
+        fields = ['product_name', 'seller_name', 'quantity', 'unit_price', 'subtotal', 'offer']
 
 
 # Serializador para poder obtener las facturas
