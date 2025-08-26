@@ -31,7 +31,7 @@ class SerializerProducts(serializers.ModelSerializer):
         model = Products
         # Serializamos todos los campos del modelo
         fields = '__all__'
-    
+        read_only_fields = ('producer',)
         # funcion personalizada para validar el precio
     def validate_price(self, value):
         if value <= 0:

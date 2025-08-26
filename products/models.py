@@ -10,6 +10,8 @@ class Category(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False, unique=True)
     # descripcion de la categoria debe ser requerido
     description = models.TextField(blank=False, null=False)
+    # imagen de las categorias
+    image = models.ImageField(blank=False, null=False, default="categories_picture/default.jpeg", upload_to="categories_picture/")
     
     class Meta:
         verbose_name = "Category"

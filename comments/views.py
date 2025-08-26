@@ -119,13 +119,6 @@ class CommentsProduct(APIView):
         
         # Obtenemos lso comentarios del poroducto obtenido
         comments_product = Comments.objects.filter(product=product.id)
-        
-        # Verificamos que axistan comentarios 
-        if not comments_product.exists():
-            return Response(
-                {'message': 'Este producto no tiene comentarios aun'}, 
-                status=status.HTTP_200_OK
-            )
         # LLmamos al serializador para obtener la informacion
         serializer = CommentSerializer(comments_product, many=True)
         # Mensaje de exito

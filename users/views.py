@@ -157,6 +157,7 @@ class LoginView(APIView):
             if not user.two_factor_enabled:
                 refresh = RefreshToken.for_user(user)
                 return Response({
+                    "id": user.id,
                     "access": str(refresh.access_token),
                     "refresh": str(refresh),
                     "userImage": user.profile_image.url if user.profile_image else None,
@@ -208,6 +209,7 @@ class LoginViewStep2(APIView):
             token_obj.delete()
 
             return Response({
+                "id": user.id,
                 "access": str(refresh.access_token),
                 "refresh": str(refresh),
                 "userImage": user.profile_image.url if user.profile_image else None,

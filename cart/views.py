@@ -4,10 +4,10 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from products.models import Products
+from products.models import Products, Category
 
-from .models import FavoriteProducts, ShoppingCart, CartProducts
-from .serializer import  FavoriteProductsSerializer,  CartUserSerializer
+from .models import FavoriteProducts, ShoppingCart, CartProducts, FavoritesCategories
+from .serializer import  FavoriteProductsSerializer,  CartUserSerializer, FavoritesCategoriesUser, NewFavoriteCategorySerializer
 # Create your views here.
 
 
@@ -192,3 +192,66 @@ class DeleteProductCartUserView(APIView):
 
         # Devolvemos una respuesta exitosa sin contenido
         return Response({"detail": "Producto eliminado del carrito."}, status=status.HTTP_200_OK)
+    
+
+# Vista para obtener y añadir las categorias favoritas
+class FavoritesCategoriesview(APIView):
+    # Indicamos el método de autenticación
+    authentication_classes = [JWTAuthentication]
+    # Solo los usuarios autenticados pueden acceder a esta vista
+    permission_classes = [IsAuthenticated]
+    
+    # Método GET: obtiene los productos favoritos del usuario autenticado
+    def get(self, request, *args, **kwargs):
+        # Filtramos los productos favoritos por el usuario autenticado
+        favorite = FavoritesCategories.objects.filter(user=request.user)
+        # Serializamos los productos favoritos
+        serializer = FavoritesCategoriesUser(favorite, many=True)
+        # Retornamos la lista de productos favoritos
+        return Response(serializer.data)
+    
+    # Método POST: permite agregar un nuevo producto a favoritos
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        # Obtenemos la categoria de la data
+        try:
+            Category.objects.get(id=data["category"])
+        except Category.DoesNotExist:
+            return Response({'category': 'La categoria no existe'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        serializer = NewFavoriteCategorySerializer(
+            # Enviamos los datos enviados por el cliente (product_id)
+            data=request.data,
+            # Enviamos también el request completo como contexto para acceder a request.user en el serializador
+            context={'request': request}
+        )
+        # Validamos el serializador
+        serializer.is_valid(raise_exception=True)
+        favorite = serializer.save()
+        return Response({"message": f"La categoria {favorite.category.name} se agrego correctamente"}, status=status.HTTP_200_OK)
+    
+    
+# View para eliminar una categoria de favoritos
+class DeleteCategoryFavoriteView(APIView):
+    # Indicamos el método de autenticación
+    authentication_classes = [JWTAuthentication]
+    # Solo los usuarios autenticados pueden acceder a esta vista
+    permission_classes = [IsAuthenticated]
+    # Verificamos que exista una categoria en favoritos
+    def get_object(self, request, category_id):
+        try:
+            return FavoritesCategories.objects.get(user=request.user, id=category_id)
+        except FavoritesCategories.DoesNotExist:
+            return None
+    # Method DELETE
+    def delete(self, request, category_id, *args, **kwargs):
+        # Obtenemos la categoria
+        category = self.get_object(request, category_id)
+        # Verificamos que este en favoritos
+        if not category:
+            return Response({'category': 'La categoria no fue encontrada o no tienes permisos para eliminarla'})
+        # Obtenemos el nombre de la categoria y la eliminamos
+        category_name = category.category.name
+        category.delete()
+        
+        return Response({'message':f'La categoria {category_name} fue elimina de favoritos de manera correcta'}, status=status.HTTP_200_OK)

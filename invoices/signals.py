@@ -3,49 +3,44 @@ from django.dispatch import receiver
 from .models import Invoice, DetailInvoice
 from offers_and_coupons.models import Coupon, UserCoupon
 
-@receiver(post_save, sender=Invoice)
-def check_and_assign_coupon(sender, instance, created, **kwargs):
+@receiver(post_save, sender=DetailInvoice)
+def check_and_assign_coupon_from_detail(sender, instance, created, **kwargs):
     if not created:
         return
 
-    # Obtener el usuario que realizó la compra
-    user = instance.user
+    # 2. Obtener la información principal
+    invoice = instance.invoice
+    user = invoice.user
+    product = instance.product
+    subtotal = instance.subtotal
 
-    # Obtener todos los detalles de la factura recién creada
-    detail_invoice_items = DetailInvoice.objects.filter(invoice=instance)
+    # 3. Buscar cupones asociados al producto
+    coupons_disponibles = Coupon.objects.filter(product=product)
 
-    # Agrupar los detalles por vendedor para verificar los cupones
-    vendedores_y_productos = {}
-    for detail in detail_invoice_items:
-        # Asumimos que el producto tiene un campo 'seller' o que podemos obtenerlo a través de la relación.
-        # En este caso, lo obtendremos del modelo Coupon.
-        product = detail.product
-        subtotal = detail.subtotal
+    # 4. Iterar sobre los cupones encontrados y aplicar las validaciones
+    for coupon in coupons_disponibles:
 
-        # Buscar cupones asociados a este producto y que estén activos
-        cupones_disponibles = Coupon.objects.filter(product=product, active=True).filter(
-            start_date__lte=instance.created_at, end_date__gte=instance.created_at
-        )
+        # 4a. Verificar si el cupón está activo (usando tu método is_active)
+        if coupon.is_active():
 
-        for coupon in cupones_disponibles:
-            if coupon.is_active():
-                # 1. Verificar si el monto comprado del producto cumple con el requisito del cupón
-                if subtotal >= coupon.min_purchase_amount:
+            # 4b. Verificar el monto mínimo de compra
+            if subtotal >= coupon.min_purchase_amount:
 
-                    # 2. Verificar que el usuario no tenga ya este cupón de este mismo vendedor
-                    vendedor = coupon.seller
+                # 4c. Verificar si el usuario ya tiene el cupón de ese vendedor
+                seller = coupon.seller
+                user_has_coupon = UserCoupon.objects.filter(
+                    user=user,
+                    coupon__product=product,
+                    coupon__seller=seller
+                ).exists()
+
+                if not user_has_coupon:
                     
-                    # Usamos exists() para una verificación más eficiente
-                    user_has_coupon = UserCoupon.objects.filter(
+                    # 5. Crear la instancia de UserCoupon
+                    cupon_user = UserCoupon.objects.create(
                         user=user,
-                        coupon__product=product, # Filtra por el producto asociado al cupón
-                        coupon__seller=vendedor # Filtra por el vendedor del cupón
-                    ).exists()
-
-                    if not user_has_coupon:
-                        # Crear la instancia de UserCoupon
-                        UserCoupon.objects.create(
-                            user=user,
-                            coupon=coupon
-                        )
-                        print(f"Cupón de {coupon.percentage}% asignado a {user.username} por la compra de {product.name}.")
+                        coupon=coupon
+                    )
+                    print(f"Se asigno el cupon al usuario {user.username}', para un descuento de {cupon_user.coupon.percentage} para el producto {cupon_user.coupon.product.name}")
+                else:
+                    print(f"El usuario '{user.username}' YA tiene este cupón. No se asignará de nuevo.")

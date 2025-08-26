@@ -5,33 +5,58 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Offers, Coupon
 from products.models import Products
-from .serializer import NewOffertSerializer, NewCouponSerializer
+from rest_framework.generics import get_object_or_404
+from .serializer import NewOffertSerializer, NewCouponSerializer,  ProductDetailSerializer
 
 # Create your views here.
 
 # Vista para crear una nueva oferta
-class NewOffertView(APIView):
-    # Solo los usuarios con token JWT pueden acceder
+class NewOfferView(APIView):
     authentication_classes = [JWTAuthentication]
-    # Solo usuarios autenticados pueden acceder
     permission_classes = [IsAuthenticated]
-    # METHOD POST
+
+    def verify_offer(self, request):
+        product_id = request.data.get("product")
+        if not product_id:
+            return None
+
+        # Traemos las ofertas relacionadas al producto y activas
+        offers = Offers.objects.filter(product_id=product_id, active=True)
+
+        # Filtramos las que realmente estén activas según la fecha
+        valid_offers = [offer for offer in offers if offer.is_active()]
+        return valid_offers if valid_offers else None
+
     def post(self, request, *args, **kwargs):
-        # Obtenemos el producto de lapeticion
+        # Validamos que el producto exista y sea del usuario
         try:
             Products.objects.get(id=request.data['product'], producer=request.user)
         except Products.DoesNotExist:
-            return Response({'product': 'El producto no existe o no tienes permisos para asignar una oferta al producto'}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        # Llamamos al serializador para validar la data
-        serializer = NewOffertSerializer(data=request.data, context={'request':request})
-        # Si el serializador es valido
+            return Response(
+                {'product': 'El producto no existe o no tienes permisos para asignar una oferta a este producto'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Verificamos si ya tiene una oferta activa
+        existing_offers = self.verify_offer(request)
+        if existing_offers:
+            return Response(
+                {'error': f'El producto ya tiene una oferta activa ({existing_offers[0].percentage}% de descuento)'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Validamos la data con el serializador
+        serializer = NewOffertSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        # Creamos y guardamso el objetoi
+
+        # Guardamos la oferta
         offer_instance = serializer.save()
-        # Retornamos mensaje de confirmacion 
-        return Response({'message': f'La oferta creada al producto {offer_instance.product.name} ha sido creada con exito'}, status=status.HTTP_201_CREATED)
-    
+
+        return Response(
+            {'message': f'La oferta "{offer_instance.title}" para el producto {offer_instance.product.name} ha sido creada con éxito'},
+            status=status.HTTP_201_CREATED
+        )
+
 
 # Vista ppara cambiart el estado de la oferta
 class DesactiveOffert(APIView):
@@ -73,12 +98,32 @@ class NewCoupontView(APIView):
     # Solo usuarios autenticados pueden acceder
     permission_classes = [IsAuthenticated]
     # METOD POST
+    def verify_coupon(self, request):
+        product_id = request.data.get("product")
+        if not product_id:
+            return None
+
+        # Traemos los cupones relacionados al producto y que estén marcados como activos
+        coupons = Coupon.objects.filter(product_id=product_id, active=True)
+
+        # Filtramos los que realmente estén activos según la fecha
+        valid_coupons = [coupon for coupon in coupons if coupon.is_active()]
+
+        return valid_coupons if valid_coupons else None
+    
     def post(self, request, *args, **kwargs):
         # Obtenemos y verificamose l producto de la petcion
         try:
             Products.objects.get(id=request.data['product'], producer=request.user)
         except Products.DoesNotExist:
             return Response({'product': 'El producto no existe o no tienes permisos para asignar una oferta al producto'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        existing_coupons = self.verify_coupon(request)
+        if existing_coupons:
+            return Response(
+                {'error': f'El producto ya tiene un cupón activo ({existing_coupons[0].percentage}% de descuento)'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         # Llamamos al serializador
         serializer = NewCouponSerializer(data=request.data, context={'request':request})
@@ -123,3 +168,15 @@ class DesactiveCoupon(APIView):
             {"message": f"La oferta fue {'activada' if active else 'desactivada'} correctamente."},
             status=status.HTTP_200_OK
         )
+    
+
+class ProductDetailView(APIView):
+    permission_classes = [AllowAny]  # Si quieres que no necesite login
+
+    def get(self, request, pk):
+        # Buscamos el producto
+        product = get_object_or_404(Products, pk=pk)
+
+        # Serializamos
+        serializer = ProductDetailSerializer(product)
+        return Response(serializer.data)

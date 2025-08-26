@@ -14,12 +14,12 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         # modelo que utilizaremos
         model = CustomUser
         # campos que se utilizaran 
-        fields = ['username', 'email', 'password', 'password2']
+        fields = ['id','username', 'email', 'password', 'password2']
         # indicamos que la contraseño solo se podra escribir
         extra_kwargs = {
             'password': {'write_only': True},
         }
-    
+        read_only = ['id',]
     # funcion que valida el formulario
     def validate(self, data):
         """
@@ -114,6 +114,7 @@ class RegisterGroupSerializer(serializers.ModelSerializer):
         model = CustomUser
         # Campos a utilizar
         fields = [
+            'id'
             'username',
             'email',
             'password',
@@ -127,6 +128,7 @@ class RegisterGroupSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
+        read_only = ['id',]
 
     # Validaciones de contraseña
     def validate(self, data):
@@ -215,6 +217,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         model = CustomUser
         # Campos que solicitaremos
         fields = [
+            'id',
             'username',
             'email',
             'phone_number',
@@ -227,6 +230,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'username': {'required': False},
             'email': {'required': False},
         } 
+        
+        read_only = ['id',]
     
     # Funcion que permite actualizar a el usuario
     def update(self, instance, validated_data):

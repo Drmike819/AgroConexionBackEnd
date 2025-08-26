@@ -47,3 +47,21 @@ class CartProducts(models.Model):
     # Representación en el panel de administración de Django
     def __str__(self):
         return f"{self.quantity} x {self.product.name} en el carrito de {self.cart.user.username}"
+    
+
+# Modelo para agregar una categoria a favoritos
+class FavoritesCategories(models.Model):
+    # campo en donde indicamos la union entre usuario y la tabla favorito
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='favorites_category_user')
+    # campo en donde indicamos la union entre category y la tabla favoritos 
+    category = models.ForeignKey('products.Category', on_delete=models.CASCADE, related_name='favorited_categories')
+    # campo de la fecha de agregacion a favoritos
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    # clase que nos permite indicar que un usuario no puede repetir una categoria en favoritos
+    class Meta:
+        unique_together = ('user', 'category')
+    
+    # Mensaje que se mostrara en el admina
+    def __str__(self):
+        return f"Favoritos de {self.user.username}"

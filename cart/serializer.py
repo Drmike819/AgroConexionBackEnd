@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from products.serializer import SerializerProducts
-from .models import FavoriteProducts, CartProducts, ShoppingCart
-from products.models import Products
-from products.serializer import SerializerProducts
+from .models import FavoriteProducts, CartProducts, ShoppingCart, FavoritesCategories
+from products.models import Products, Category
+from products.serializer import SerializerProducts, SerializerCategories
 
 # Serializador para agregar un producto a favoritos        
 class FavoriteProductsSerializer(serializers.ModelSerializer):
@@ -69,3 +69,51 @@ class CartUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'created_at', 'products']
         # Los campos 'id' y 'created_at' no pueden ser modificados por el cliente
         read_only_fields = ['id', 'created_at']
+
+
+# Serializador para añadir una categoria a favoritos
+class NewFavoriteCategorySerializer(serializers.ModelSerializer):
+    # Campo en donde buscamos la categoria
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), write_only=True
+    )
+    # Campo para obtener el detalle de las categorias
+    category_detail = SerializerCategories(read_only=True)
+    # Indicamos el modelo y los campos a utilizar
+    class Meta:
+        model = FavoritesCategories
+        fields = ['category', 'category_detail', 'added_at']
+        
+    # Verificaque la categoria exista
+    def validate_category(self, data):
+        if not Category.objects.filter(pk=data.pk):
+            raise serializers.ValidationError({'category': 'La categoria no existe'})
+        return data
+    # Validamos que la categoria no esta añadida a favoritos
+    def validate(self, data):
+        user = self.context['request'].user
+        category = data.get("category")
+        if FavoritesCategories.objects.filter(category=category, user=user):
+            raise serializers.ValidationError({'duplicate': 'La categoria ya esta en favoritos'})
+        return data
+    # Fincion que crear la union 
+    def create(self, validated_data):
+        request = self.context['request']
+        user = request.user
+        validated_data["user"] = user
+        instance_categoryFavorite = FavoritesCategories.objects.create(**validated_data)
+        return instance_categoryFavorite
+
+
+# Serializador para obtener la informacion de la categorias en favoritos
+class FavoritesCategoriesUser(serializers.ModelSerializer):
+    # Obtenemos el serializador de la informacion de las categorias
+    category = SerializerCategories(read_only=True)
+    # Indicamos el modelo y la informacion a utilizar
+    class Meta:
+        model = FavoritesCategories
+        fields = ['id', 'category', 'added_at']
+        
+        read_only_fields = ['id', 'created_at']
+        
+    

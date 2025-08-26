@@ -122,7 +122,7 @@ class EditCommentSerializer(serializers.ModelSerializer):
 class CommentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['email', 'username', 'profile_image']
+        fields = ['id', 'email', 'username', 'profile_image']
         
 # Serializer que nos permite imprimir la informacion de os comentarios con sus imagenes
 class CommentSerializer(serializers.ModelSerializer):
