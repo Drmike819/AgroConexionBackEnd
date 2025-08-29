@@ -9,7 +9,7 @@ class OffersAdmin(admin.ModelAdmin):
 
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
-    list_display = ("id", "description")
+    list_display = ("id", "code", "description")
 
 @admin.register(UserCoupon)
 class UserCouponnAdmin(admin.ModelAdmin):

@@ -5,6 +5,8 @@ from datetime import timedelta
 
 from users.models import CustomUser
 from products.models import Products
+import string
+from django.utils.crypto import get_random_string
 # Create your models here.
 
 # Modelo en donde el usuario vendedor agregara ofertas a susu productos
@@ -60,6 +62,23 @@ class Coupon(models.Model):
     end_date = models.DateTimeField()
     # Indicador de estado del cupon
     active = models.BooleanField(default=True)
+    code = models.CharField(max_length=6, editable=False, unique=True, null=True, blank=True)
+
+    
+    def save(self, *args, **kwargs):
+        # Solo generamos el código si no existe
+        if not self.code:
+            self.code = self.generate_unique_code()
+        super().save(*args, **kwargs)
+
+    def generate_unique_code(self):
+        characters = string.ascii_uppercase + string.digits
+        code = get_random_string(length=6, allowed_chars=characters)
+
+        # Validamos que no exista en la BD
+        while Coupon.objects.filter(code=code).exists():
+            code = get_random_string(length=6, allowed_chars=characters)
+        return code
 
     # Funcion que indica si el cuypon esta activo o no
     def is_active(self):
@@ -82,4 +101,4 @@ class UserCoupon(models.Model):
     assigned_at = models.DateTimeField(auto_now_add=True)
     # Funcion que devuelve un mensaje
     def __str__(self):
-        return f"{self.user.username} - ({'Usado' if self.used else 'Disponible'})"
+        return f"Coupon {self.coupon.code} para {self.user.username} ({'Usado' if self.used else 'Disponible'})"

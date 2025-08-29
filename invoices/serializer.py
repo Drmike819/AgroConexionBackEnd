@@ -2,8 +2,10 @@ from rest_framework import serializers
 from .models import Invoice, DetailInvoice
 from products.models import Products
 from offers_and_coupons.models import Offers, Coupon, UserCoupon
-from offers_and_coupons.serializer import OfferSerializer
+from offers_and_coupons.serializer import OfferSerializer, CouponUseSerializer, CouponSerializer
 from django.utils import timezone
+from decimal import Decimal
+from django.db import transaction
 # Serializador para verificar la información de cada producto solicitado en una factura
 class DetailProductSerializer(serializers.Serializer):
 
@@ -11,7 +13,8 @@ class DetailProductSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
     # Cantidad solicitada del producto
     quantity = serializers.IntegerField(min_value=1)
-
+    # Codigo del cupon
+    coupon = CouponUseSerializer(required=False)
     # Validación personalizada para verificar existencia del producto y disponibilidad de stock
     def validate(self, data):
         try:
@@ -48,70 +51,110 @@ class InvoiceCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError('No se proporcionaron productos.')
         return data
     
+    @transaction.atomic
     # Función para crear una factura y sus detalles
     def create(self, validated_data):
-        # Obtenemos el usuario autenticado desde el contexto
+        # Obtenemso el metodo de pago, el usuario y los productos 
         user = self.context['request'].user
-        
-        # Obtenemos el método de pago seleccionado
         method = validated_data['method']
-        
-        # Obtenemos la lista de productos con cantidades a comprar
         items = validated_data['items']
-        
-        invoice = Invoice.objects.create(
-            user=user, 
-            method=method,
-            total=0,
-        )
-        total = 0
-        
-        # Iteramos sobre los productos para crear cada detalle de factura
+
+        # Creamos una factura con datos parciales
+        invoice = Invoice.objects.create(user=user, method=method, total=Decimal('0.00'))
+        # Indicamos que el total es cero
+        total = Decimal('0.00')
+        # Obtenemos la hora exacta
+        now = timezone.now()
+
+        # Recorremso los productos
         for item in items:
-            # Obtenemos la instancia del producto
+            # Obtenemos el producto, la cantidad a cxomprar y el precio del producto
             product = item['product']
-            # Obtenemos la cantidad comprada
             quantity = item['quantity']
-            
-            # Obtenemos el precio unitario del producto
             unit_price = product.price
-            subtotal = unit_price * quantity 
             
+            # Inicializamos el subtotal con el precio base
+            subtotal = unit_price * quantity
+            
+            # Variables para descuentos aplicados
+            applied_offer = None
+            applied_coupon = None
+            user_coupon_instance = None
+
+            # Obtenemos la oferta del producto si existye y si esta activa
             offer = Offers.objects.filter(
-                product=product,
-                active=True,
-                start_date__lte=timezone.now(),
-                end_date__gte=timezone.now()
+                product=product, active=True,
+                start_date__lte=now, end_date__gte=now
             ).first()
-
+            # Si hay oferta
             if offer:
-                discount = (unit_price * offer.percentage) / 100
-                discounted_unit_price = unit_price - discount  
-                subtotal = discounted_unit_price * quantity
+                # Obtenemos el descuento
+                discount_percentage = offer.percentage
+                # Aplicamos el descuento
+                subtotal *= (1 - discount_percentage / 100)
+                # Indicamos que la oferta fue aplicada
+                applied_offer = offer
 
-            # Creamos el detalle de factura
+            # Obtenemos el cupon de la solicitud
+            coupon_payload = item.get('coupon')
+            if coupon_payload and coupon_payload.get('code'):
+                # Si hay cupon obtenemso el codigo del mismo
+                code = coupon_payload['code']
+                # Verificamos que exista el cupony que este este activo
+                try:
+                    coupon = Coupon.objects.get(
+                        code=code,
+                        product=product,
+                        active=True,
+                        start_date__lte=now,
+                        end_date__gte=now
+                    )
+                except Coupon.DoesNotExist:
+                    raise serializers.ValidationError(f"El cupón {code} no es válido para este producto o está inactivo/expirado.")
+                
+                # Verificar si el usuario tiene el cupón y no lo ha usado
+                user_coupon_instance = UserCoupon.objects.filter(
+                    user=user, coupon=coupon, used=False
+                ).first()
+
+                if user_coupon_instance is None:
+                    raise serializers.ValidationError(f"El cupón {code} no está asignado a tu usuario o ya fue utilizado.")
+
+                # Aplicar descuento del cupón sobre el subtotal que ya fue modificado por la oferta
+                discount_percentage = coupon.percentage
+                subtotal *= (1 - discount_percentage / 100) # Aplica descuento directamente
+                applied_coupon = coupon
+                
+                # 3) Marcar user coupon como usado
+                user_coupon_instance.used = True
+                user_coupon_instance.save()
+
+            # Asegurarse de que el subtotal no sea negativo
+            if subtotal < 0:
+                subtotal = Decimal('0.00')
+
+            # Crear el detalle de la factura
             DetailInvoice.objects.create(
                 seller=product.producer,
                 invoice=invoice,
                 product=product,
                 quantity=quantity,
-                unit_price=unit_price,
-                subtotal=subtotal,
-                offer=offer if offer else None
+                unit_price=unit_price, # El precio unitario siempre es el base
+                subtotal=subtotal, # El subtotal es el precio con descuentos aplicados
+                offer=applied_offer,
+                coupon=applied_coupon
             )
 
-            # Descontamos la cantidad comprada del stock del producto
+            # Actualizar stock del producto
             product.stock -= quantity
             product.save()
-            
-            # Sumamos el subtotal al total general
-            total += subtotal      
 
-        # Actualizamos el total de la factura
+            # Sumar al total de la factura
+            total += subtotal
+            
+        # Actualizar el total de la factura
         invoice.total = total
         invoice.save()
-
-        # Retornamos la factura creada
         return invoice
 
 
@@ -121,11 +164,12 @@ class DetailInvoiceSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name')
     seller_name = serializers.CharField(source='seller.username', read_only=True)
     offer = OfferSerializer(read_only=True)
+    coupon = CouponSerializer(read_only = True)
     class Meta:
         # Indicamos le modelo a utilizar
         model = DetailInvoice
         # Indicamos los campos que obtenedremos en el JSON
-        fields = ['product_name', 'seller_name', 'quantity', 'unit_price', 'subtotal', 'offer']
+        fields = ['product_name', 'seller_name', 'quantity', 'unit_price', 'subtotal', 'offer', "coupon"]
 
 
 # Serializador para poder obtener las facturas

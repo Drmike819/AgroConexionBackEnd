@@ -130,13 +130,19 @@ class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Offers
         fields = ["id", "title", "description", "percentage", "start_date", "end_date"]
+        
+
+# Serializador para obtener la informacion de un cupon
+class CouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coupon
+        fields = '__all__'
 
 
 # Serializer para imprimir la informcacion del detalle del producto con su oferta activa
 class ProductDetailSerializer(serializers.ModelSerializer):
     # Obtenemos las ofertas de los prdocutos
     offers = serializers.SerializerMethodField()
-
     # Modelo y campos a utilizar
     class Meta:
         model = Products
@@ -157,3 +163,12 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         offers = obj.offers.filter(active=True)
         active_offers = [offer for offer in offers if offer.is_active()]
         return OfferSerializer(active_offers, many=True).data
+
+
+# Serializador para validar el fromato del codigo 
+class CouponUseSerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=6)
+
+    # Convertimos el codigo en mayusculas
+    def validate_code(self, value):
+        return value.strip().upper()

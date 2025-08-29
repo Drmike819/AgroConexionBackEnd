@@ -1,5 +1,5 @@
 from django.db import models
-from offers_and_coupons.models import Offers
+from offers_and_coupons.models import Offers, Coupon
 # Create your models here.
 
 # Creacion del modelo de la factura
@@ -30,15 +30,15 @@ class DetailInvoice(models.Model):
     # Campo que indica el producto a comprar
     product = models.ForeignKey('products.Products', on_delete=models.PROTECT)
     # Campo donde indicamos el vendedor del producto
-    seller = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='invoices_seller', default=1)
+    seller = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='invoices_seller')
     # Cantidad que deseamos comprar
     quantity = models.PositiveIntegerField()
     # Obtenemos el precio del producto
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     # Calculamos el precio dependiendo de la catidad a comprar y el precio del producto
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
-    offer = models.ForeignKey(Offers, on_delete=models.SET_NULL, null=True, blank=True, related_name="detail_invoices"
-    )
+    offer = models.ForeignKey(Offers, on_delete=models.SET_NULL, null=True, blank=True, related_name="detail_invoices")
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True, related_name="detail_invoices")
     # Mensaje que se vera en el admin
     def __str__(self):
         return f'{self.quantity} x {getattr(self.product, "name", "Producto")} en factura #{self.invoice_id}'
