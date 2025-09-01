@@ -4,7 +4,7 @@ from django.db.models import Count
 from .serializer import (
     SerializerCategories, 
     SerializerProducts, SerializerCategoriesProducs,
-    NewRatingProductSerializer,
+    NewRatingProductSerializer, EditProductSerializer
 )
 
 from rest_framework.views import APIView
@@ -197,99 +197,70 @@ class NewProductosView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# View que permite editar un producto
 class EditProductView(APIView):
-    # Solo los usuarios con token JWT pueden acceder
+    # Indcamos el permisos para acceder a la View
     authentication_classes = [JWTAuthentication]
-    # Solo usuarios autenticados pueden acceder
     permission_classes = [IsAuthenticated]
-    
+
+    # Funcion para obtener el producto
     def get_object(self, product_id, user):
-        """
-        Función para obtener un producto específico verificando que el usuario sea el creador
-        """
         try:
-            # Verificamos que el producto existe Y que el usuario logueado sea el creador
             return Products.objects.get(id=product_id, producer=user)
         except Products.DoesNotExist:
             return None
-    
+
     def put(self, request, product_id, *args, **kwargs):
-        """
-        Actualizar un producto existente
-        """
-        # Obtenemos el producto verificando que sea del usuario logueado
+        # Obtenemos le producto a editar
         product = self.get_object(product_id, request.user)
-        
+        # En caso de no obtenerlo enviamos mensaje d error
         if not product:
             return Response(
-                {'detail': 'Producto no encontrado o no tienes permisos para editarlo'}, 
+                {"detail": "Producto no encontrado o no tienes permisos para editarlo"},
                 status=status.HTTP_404_NOT_FOUND
             )
+
         
-        # Copiamos los datos de la petición
         data = request.data.copy()
-        
-        # Si los datos vienen dentro de 'current_product', los extraemos
-        if 'current_product' in data:
-            data = data['current_product'].copy()
-        
-        # Limpieza de datos
-        try:
-            price = float(data.get('price', product.price))
-            stock = int(data.get('stock', product.stock))
-        except (ValueError, TypeError):
-            return Response(
-                {"detail": "Formato inválido en precio o stock"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Verificamos que el precio y stock sean válidos
-        if price <= 0 or stock < 0:
-            return Response(
-                {"detail": "El precio debe ser mayor a 0 y el stock no puede ser negativo"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Procesamos las categorías si se enviaron
-        if 'category' in data:
+        # Obtenemos las categorias enviadas en la data
+        if "category" in data:
             try:
-                # Verificamos si data es un QueryDict (form-data) o dict (JSON)
-                if hasattr(data, 'getlist'):
-                    # Es un QueryDict (form-data)
-                    data.setlist('category', [int(cat_id) for cat_id in data.getlist('category')])
-                else:
-                    # Es un dict normal (JSON)
-                    categories = data.get('category', [])
+                # Verificamos el formato de la categoria 
+                if hasattr(data, "getlist"): 
+                    # Devuelve los ids de las categorias
+                    data.setlist("category", [int(cat_id) for cat_id in data.getlist("category")])
+                else:  # JSON
+                    categories = data.get("category", [])
                     if isinstance(categories, list):
-                        # Ya es una lista, solo convertimos a enteros
-                        data['category'] = [int(cat_id) for cat_id in categories]
+                        data["category"] = [int(cat_id) for cat_id in categories]
                     else:
-                        # Es un solo valor, lo convertimos a lista
-                        data['category'] = [int(categories)]
+                        data["category"] = [int(categories)]
             except (ValueError, TypeError):
                 return Response(
-                    {"category": ["Formato inválido. Se espera una lista de IDs numéricos."]}, 
+                    {"category": ["Formato inválido. Se espera una lista de IDs numéricos."]},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        
-        # Utilizamos el serializer para validar y actualizar los datos
-        serializer = SerializerProducts(product, data=data, partial=True)
-        
+
+        # Enviamos el serializador con la informacion
+        serializer = EditProductSerializer(product, data=data, partial=True)
+
+        # Para soportar imágenes de form-data (request.FILES)
+        if hasattr(request.data, "getlist"):
+            # Si el frontend manda imágenes en un form-data
+            files = request.FILES.getlist("images")
+            if files:
+                serializer.initial_data["images"] = files
+
+        # Valida y actualiza el producto
         if serializer.is_valid():
-            # Guardamos los cambios
             producto_actualizado = serializer.save()
-            
-            # Si se enviaron nuevas imágenes, las agregamos
-            images = request.FILES.getlist('images')
-            for image in images:
-                producto_actualizado.images.create(image=image)
-            
             return Response(
-                {"detail": "Producto actualizado correctamente", "product": serializer.data}, 
+                {
+                    "detail": "Producto actualizado correctamente",
+                    "product": EditProductSerializer(producto_actualizado).data
+                },
                 status=status.HTTP_200_OK
             )
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

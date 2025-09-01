@@ -48,9 +48,10 @@ class InvoiceCreateSerializer(serializers.Serializer):
     def validate(self, data):
         items = data.get('items', [])
         if not items:
-            raise serializers.ValidationError('No se proporcionaron productos.')
+            raise serializers.ValidationError({"products":'No se proporcionaron productos.'})
         return data
     
+    # Ayuda a cortar todo proceso para evitar errores
     @transaction.atomic
     # Función para crear una factura y sus detalles
     def create(self, validated_data):
@@ -110,7 +111,7 @@ class InvoiceCreateSerializer(serializers.Serializer):
                         end_date__gte=now
                     )
                 except Coupon.DoesNotExist:
-                    raise serializers.ValidationError(f"El cupón {code} no es válido para este producto o está inactivo/expirado.")
+                    raise serializers.ValidationError({"coupon": f"El cupón {code} no es válido para este producto o está inactivo/expirado."})
                 
                 # Verificar si el usuario tiene el cupón y no lo ha usado
                 user_coupon_instance = UserCoupon.objects.filter(
@@ -118,14 +119,16 @@ class InvoiceCreateSerializer(serializers.Serializer):
                 ).first()
 
                 if user_coupon_instance is None:
-                    raise serializers.ValidationError(f"El cupón {code} no está asignado a tu usuario o ya fue utilizado.")
+                    raise serializers.ValidationError({"coupon": f"El cupón {code} no está asignado a tu usuario o ya fue utilizado."})
 
-                # Aplicar descuento del cupón sobre el subtotal que ya fue modificado por la oferta
+                # Aplicar descuento del cupón sobre el subtotal
                 discount_percentage = coupon.percentage
-                subtotal *= (1 - discount_percentage / 100) # Aplica descuento directamente
+                # Aplica descuento
+                subtotal *= (1 - discount_percentage / 100)
+                # Indicamos que el cupon ya fue usado
                 applied_coupon = coupon
                 
-                # 3) Marcar user coupon como usado
+                # Indicamos que el cupon fue utilizado
                 user_coupon_instance.used = True
                 user_coupon_instance.save()
 
@@ -139,8 +142,9 @@ class InvoiceCreateSerializer(serializers.Serializer):
                 invoice=invoice,
                 product=product,
                 quantity=quantity,
-                unit_price=unit_price, # El precio unitario siempre es el base
-                subtotal=subtotal, # El subtotal es el precio con descuentos aplicados
+                unit_price=unit_price,
+                subtotal=subtotal,
+                # Indicamos que la ofertya y el cupon son las intancias creadas
                 offer=applied_offer,
                 coupon=applied_coupon
             )

@@ -44,7 +44,83 @@ class SerializerProducts(serializers.ModelSerializer):
             raise serializers.ValidationError("El stock no puede ser negativo")
         return value
 
-               
+
+# Serializador para editar un producto 
+class EditProductSerializer(serializers.ModelSerializer):
+    # Variable que almacenará las nuevas imágenes
+    images = serializers.ListField(
+        child=serializers.ImageField(max_length=None, allow_empty_file=False, use_url=False),
+        write_only=True,
+        required=False
+    )
+
+    # Lista en donde almacenaremos los ID de las imágenes que queremos eliminar 
+    delete_images = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True,
+        required=False
+    )
+
+    # Para mostrar las imágenes existentes (solo lectura)
+    current_images = serializers.SerializerMethodField(read_only=True)
+
+    # Indicamos el modelo y los campos a utilizar
+    class Meta:
+        model = Products
+        fields = [
+            "id",
+            "name",
+            "description",
+            "price",
+            "stock",
+            "unit_of_measure",
+            "category",
+            "producer",
+            "date_of_registration",
+            "state",
+            "images",
+            "delete_images",
+            "current_images"
+        ]
+        # Campos que no se pueden editar
+        read_only_fields = ["id","producer", "date_of_registration"]
+
+    # Funcion para obtener la imagenes del producto
+    def get_current_images(self, obj):
+        return [
+            {"id": image.id, "image": image.image.url}
+            for image in obj.images.all()
+        ]
+
+    # Funcion para actualizar el producto
+    def update(self, instance, validated_data):
+        # Obtenemos las imagenes nuevas 
+        new_images = validated_data.pop("images", [])
+        # Obtenemos losd ids de las imagenes a eliminar
+        delete_images_ids = validated_data.pop("delete_images", [])
+        # Obtenemos las categorias enviadas por el usuario
+        categories_data = validated_data.pop("category", None)
+
+        # Actualizamos los campos del producto
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Actualizamos y remplaza las categorias
+        if categories_data is not None:
+            instance.category.set(categories_data)
+
+        # Agrga lasnuevam s iamgenes del usuario
+        for image in new_images:
+            ProductImage.objects.create(product=instance, image=image)
+
+        # Elimina las imagenes selecionadas
+        if delete_images_ids:
+            ProductImage.objects.filter(id__in=delete_images_ids, product=instance).delete()
+
+        return instance
+
+                   
 # serializer para tener las categorias en archivo JSON(API)
 class SerializerCategoriesProducs(serializers.ModelSerializer):
     # Añadimos el serializador de productos para mostar todo los productos asociados
