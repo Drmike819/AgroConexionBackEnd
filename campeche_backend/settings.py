@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'invoices',
     'comments',
     'offers_and_coupons',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -201,8 +202,9 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = config("EMAIL_HOST_USER")
 
-
+# Conexion de lso procesos asincronicos 
 ASGI_APPLICATION = 'campeche_backend.asgi.application'
+# Idicamos el canal que enviaria las peticiones asincronicas
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",

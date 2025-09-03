@@ -6,6 +6,8 @@ from offers_and_coupons.serializer import OfferSerializer, CouponUseSerializer, 
 from django.utils import timezone
 from decimal import Decimal
 from django.db import transaction
+
+from notifications.utils import send_notification
 # Serializador para verificar la información de cada producto solicitado en una factura
 class DetailProductSerializer(serializers.Serializer):
 
@@ -148,7 +150,33 @@ class InvoiceCreateSerializer(serializers.Serializer):
                 offer=applied_offer,
                 coupon=applied_coupon
             )
+            
+            # Obtenemos la primera imagen del producto
+            first_image = product.images.first()
+            # Obtenemos la url de esa imagen
+            image_url = first_image.image.url if first_image else None
 
+            # Creamos la notificacion
+            notificacion = send_notification(
+                # Usuario al cual se le enviare la notificacion
+                user=product.producer,
+                # Tiopo de notificacion
+                type='purchase',
+                # Titulo
+                title='¡Nueva venta!',
+                # Mensaje
+                message=f"{user.username} compró {quantity} {product.get_unit_of_measure_display()} de {product.name}.",
+                # Url de la imagen
+                image=image_url,
+                # Informacion que puede variar a eleccion
+                data={
+                    "buyer": user.username,
+                    "product": product.name,
+                    "quantity": quantity
+                }
+            )
+
+            print(notificacion)
             # Actualizar stock del producto
             product.stock -= quantity
             product.save()
