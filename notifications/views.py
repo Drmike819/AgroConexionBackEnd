@@ -26,10 +26,7 @@ class NotificatiosnView(APIView):
         
         # Verificamos si el usuario tiene productos
         if not notifications.exists():
-            return Response(
-                {'message': 'Notienes notificaciones'}, 
-                status=status.HTTP_200_OK
-            )
+            return Response([])
         # Obtenemos el serializador y le pasamos los datos
         serializer = NotificationsSerializer(notifications, many=True)
         # Retornamos la informacion
