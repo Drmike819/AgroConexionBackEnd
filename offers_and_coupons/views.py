@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import Offers, Coupon
 from products.models import Products
 from rest_framework.generics import get_object_or_404
-from .serializer import NewOffertSerializer, NewCouponSerializer,  ProductDetailSerializer
+from .serializer import NewOffertSerializer, NewCouponSerializer
 
 # Create your views here.
 
@@ -168,15 +168,3 @@ class DesactiveCoupon(APIView):
             {"message": f"La oferta fue {'activada' if active else 'desactivada'} correctamente."},
             status=status.HTTP_200_OK
         )
-    
-
-class ProductDetailView(APIView):
-    permission_classes = [AllowAny]  # Si quieres que no necesite login
-
-    def get(self, request, pk):
-        # Buscamos el producto
-        product = get_object_or_404(Products, pk=pk)
-
-        # Serializamos
-        serializer = ProductDetailSerializer(product)
-        return Response(serializer.data)

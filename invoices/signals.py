@@ -2,6 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import Invoice, DetailInvoice
 from offers_and_coupons.models import Coupon, UserCoupon
+from notifications.utils import send_notification
 
 @receiver(post_save, sender=DetailInvoice)
 def check_and_assign_coupon_from_detail(sender, instance, created, **kwargs):
@@ -41,6 +42,28 @@ def check_and_assign_coupon_from_detail(sender, instance, created, **kwargs):
                         user=user,
                         coupon=coupon
                     )
+                    # Obtenemos la primera imagen del producto
+                    first_image = product.images.first()
+                    # Obtenemos la url de esa imagen
+                    image_url = first_image.image.url if first_image else None
+                    
+                    notificacion = send_notification(
+                        # Usuario al cual se le enviare la notificacion
+                        user=user,
+                        # Tiopo de notificacion
+                        type='custom',
+                        # Titulo
+                        title='¡Obtubiste un Nuevo Cupon!',
+                        # Mensaje
+                        message=f"Haz Otenido un cupon para el producto {product.name}",
+                        # Url de la imagen
+                        image=image_url,
+                        # Informacion que puede variar a eleccion
+                        data={
+                        }
+                    )
+
+                    print(notificacion)
                     print(f"Se asigno el cupon al usuario {user.username}', para un descuento de {cupon_user.coupon.percentage} para el producto {cupon_user.coupon.product.name}")
                 else:
                     print(f"El usuario '{user.username}' YA tiene este cupón. No se asignará de nuevo.")

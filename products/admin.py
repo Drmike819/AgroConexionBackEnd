@@ -16,7 +16,7 @@ class ProductsAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ("product", "image")
+    list_display = ("id","product", "image")
     
 @admin.register(Grades)
 class GradesAdmin(admin.ModelAdmin):

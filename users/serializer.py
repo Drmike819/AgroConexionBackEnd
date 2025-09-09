@@ -114,7 +114,7 @@ class RegisterGroupSerializer(serializers.ModelSerializer):
         model = CustomUser
         # Campos a utilizar
         fields = [
-            'id'
+            'id',
             'username',
             'email',
             'password',

@@ -19,6 +19,11 @@ class NewCommentView(APIView):
     
     # Methdo POST
     def post(self, request, *args, **kwargs):
+        data = request.data
+        product = data.get("product")
+        if not product or not Products.objects.filter(id=data["product"]).exists():
+            return Response({"product": "El producto no existe."})
+        
         # Obtenemos el serializador y le pasamos la informacion de la peticion
         serializer = NewCommentsSerializers(data=request.data, context={"request":request})
         # Validamos el serializador

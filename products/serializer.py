@@ -25,7 +25,9 @@ class SerializerProducts(serializers.ModelSerializer):
     # many=True: Permitimos que el producto tenga varias imágenes
     # read_only=True: Solo se pueden ver las imágenes, no modificarlas desde este serializer
     images = ProductImageSerializer(many=True, read_only=True)
-
+    offers = serializers.SerializerMethodField()
+    coupon = serializers.SerializerMethodField()
+    
     class Meta:
         # Indicamos el modelo que deseamos utilizar
         model = Products
@@ -43,6 +45,27 @@ class SerializerProducts(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("El stock no puede ser negativo")
         return value
+    
+    # Funcion que nos permite Obtener las ofertas 
+    def get_offers(self, obj):
+        # Obtenemos las ofertas que estan activadas
+        offers = obj.offers.filter(active=True)
+        # Buscamso las ofertas obteniudas y verificamos que esten activas
+        active_offers = [offer for offer in offers if offer.is_active()]
+        # Serializamos las ofertas con el serializador
+        from offers_and_coupons.serializer import OfferSerializer
+        # Retornamos la informascion serializada
+        return OfferSerializer(active_offers, many=True).data
+    
+    # Funcion para obtener los cupones 
+    def get_coupon(self, obj):
+        # Obtenemos los cupones que esten activos
+        coupon = obj.coupons.filter(active=True)
+        # Recorremos la lista y verificamos que esten activos
+        active_coupon = [coupon for coupon in coupon if coupon.is_active()]
+        # Serializamos y retornamos la inofrmacion
+        from offers_and_coupons.serializer import CouponSerializer
+        return CouponSerializer(active_coupon, many=True).data
 
 
 # Serializador para editar un producto 
@@ -126,12 +149,20 @@ class SerializerCategoriesProducs(serializers.ModelSerializer):
     # Añadimos el serializador de productos para mostar todo los productos asociados
     # many=True: Permitimos que el producto tenga varios productos
     # read_only=True: Solo se pueden ver los productos mas no modificarlos
-    products = SerializerProducts(source='category_products', many=True, read_only=True)
+    products = serializers.SerializerMethodField()
     class Meta:
         # indicamo el modelo que deseamos utilizar
         model = Category
         # indicamos lo campos que queremos utilizar
         fields = '__all__'
+    
+        # Método para obtener y serializar solo los productos que no sean 'inactivo'
+    def get_products(self, obj):
+        # Filtramos los productos de la categoría actual excluyendo los que tienen 'state' como 'inactivo'
+        products = obj.category_products.exclude(state='inactivo')
+        
+        # Luego serializamos los productos filtrados
+        return SerializerProducts(products, many=True).data
              
 
 # Serializador para rear un calificacion a un producto

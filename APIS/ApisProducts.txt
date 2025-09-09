@@ -22,18 +22,6 @@ Edicion de un producto
 Eliminar un producto 
     DELETE: http://127.0.0.1:8000/api/products/delete-product/<int:product_id>/
 
-Obtenemos los comentarios de un producto en especifico
-    GET: http://127.0.0.1:8000/api/products/comments/<int:product_id>/
-
-Crear un nuevo comentario
-    POST: http://127.0.0.1:8000/api/products/new-comment/
-
-Edicion de un comentario
-    PUT: http://127.0.0.1:8000/api/products/edit-comment/<int:comment_id>/
-
-Eliminar un comentario
-    DELETE: http://127.0.0.1:8000/api/products/delete-comment/<int:comment_id>/ 
-
 Permite darle una calificacion a un producto, tambien cambiar con el mismo metodo
     POST: http://127.0.0.1:8000/api/products/new-rating/
 

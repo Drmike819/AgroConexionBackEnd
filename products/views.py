@@ -72,7 +72,7 @@ class ProducstView(APIView):
     # Si el metodo de solicitud es get
     def get(self, request, *args, **kwargs):
         # obtenemos todos los objetos del modelo y lo almacenamos en una variable
-        products = Products.objects.all()
+        products = Products.objects.all().exclude(state="inactivo")
         # llamamos al serializador indicando la variable en donde tenemos todos los objetos del modelo
         # many=True: indicamos que hay mas de un modelo
         serializer = SerializerProducts(products, many=True)
@@ -94,7 +94,7 @@ class UserProductsView(APIView):
         user = request.user
         
         # Filtramos los productos por el usuario logueado (producer)
-        user_products = Products.objects.filter(producer=user)
+        user_products = Products.objects.filter(producer=user).exclude(state="inactivo")
         
         # Verificamos si el usuario tiene productos
         if not user_products.exists():
@@ -134,6 +134,10 @@ class DetailProductView(APIView):
     def get(self, request, product_id, *args, **kwargs):
         # almacenamos la funcion para obtener un producto en una variable
         product = self.get_object(product_id)
+        
+        state = product.state
+        if state == "inactivo":
+            return Response({'state': "Producto eliminado"})
         # verificamos el valor obtenido por la funcion
         if not product:
             # en caso de que no exista retornamos un mensaje
@@ -171,22 +175,34 @@ class NewProductosView(APIView):
             return Response({"detail": "El precio debe ser mayor a 0 y el stock no puede ser negativo"}, status=status.HTTP_400_BAD_REQUEST)
 
         # verificamos el campo categorias y la informacion enviada en el
-        if 'category' in data:
+        if "category" in data:
             try:
-                # obtenemos la informacion enviado y la volvemos una lista de categorias,
-                # cambias los valores string en valor numericos, y guardamo sla nueva lista con los valores remplazados
-                data.setlist('category', [int(cat_id) for cat_id in data.getlist('category')])
-            # si algun valor no sepuede comvertir a numerico mandamo suna VValueError
+                if hasattr(data, "getlist"):  # Caso QueryDict (multipart/form-data)
+                    categories = [int(cat_id) for cat_id in data.getlist("category")]
+                else:  # Caso dict normal (JSON)
+                    categories = [int(cat_id) for cat_id in data.get("category", [])]
+
+                # Reemplazamos en data (solo si es QueryDict)
+                if hasattr(data, "setlist"):
+                    data.setlist("category", categories)
+                else:
+                    data["category"] = categories
+
             except ValueError:
-                # mensaje de error
-                return Response({"category": ["Formato inválido. Se espera una lista de IDs numéricos."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"category": ["Formato inválido. Se espera una lista de IDs numéricos."]},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         # serializador para verificar los datos
         serializer = SerializerProducts(data=data)
         # si el serializador es correcto 
         if serializer.is_valid():
             # guarda el nuevo producto en la base de datos
-            producto = serializer.save()
+            
+            producto = serializer.save(producer=request.user)
+            
+            producto.save()
             # las imagenes enviadas en el formulario se asocian al nuevo producto
             images = request.FILES.getlist('images')
             for image in images:
@@ -281,10 +297,7 @@ class DeleteProductView(APIView):
         except Products.DoesNotExist:
             return None
     
-    def delete(self, request, product_id, *args, **kwargs):
-        """
-        Eliminar un producto - solo si el usuario es el creador
-        """
+    def put(self, request, product_id, *args, **kwargs):
         # Obtenemos el producto verificando que sea del usuario logueado
         product = self.get_object(product_id, request.user)
         
@@ -294,14 +307,12 @@ class DeleteProductView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Guardamos el nombre del producto para el mensaje de confirmación
-        product_name = product.name
+        product.state = "inactivo"
         
-        # Eliminamos el producto
-        product.delete()
+        product.save(update_fields=["state"])
         
         return Response(
-            {'detail': f'Producto "{product_name}" eliminado correctamente'}, 
+            {'detail': f'Producto "{product.name}" eliminado correctamente'}, 
             status=status.HTTP_200_OK
         )
        

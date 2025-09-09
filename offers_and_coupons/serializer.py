@@ -139,32 +139,6 @@ class CouponSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# Serializer para imprimir la informcacion del detalle del producto con su oferta activa
-class ProductDetailSerializer(serializers.ModelSerializer):
-    # Obtenemos las ofertas de los prdocutos
-    offers = serializers.SerializerMethodField()
-    # Modelo y campos a utilizar
-    class Meta:
-        model = Products
-        fields = [
-            "id",
-            "name",
-            "description",
-            "price",
-            "stock",
-            "unit_of_measure",
-            "state",
-            "images",
-            "offers",
-        ]
-    # Verificamos que la ofeta este activa
-    def get_offers(self, obj):
-        """Filtra solo las ofertas activas"""
-        offers = obj.offers.filter(active=True)
-        active_offers = [offer for offer in offers if offer.is_active()]
-        return OfferSerializer(active_offers, many=True).data
-
-
 # Serializador para validar el fromato del codigo 
 class CouponUseSerializer(serializers.Serializer):
     code = serializers.CharField(max_length=6)
