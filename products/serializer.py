@@ -18,64 +18,52 @@ class ProductImageSerializer(serializers.ModelSerializer):
         # indicamos los campos que serializaremos
         fields = ['id', 'image'] 
         
-
-# Creación del serializer para obtener todos los productos
+# Serializador para productos
 class SerializerProducts(serializers.ModelSerializer):
-    # Añadimos el serializador de imágenes del producto para mostrar todas las imágenes asociadas
-    # many=True: Permitimos que el producto tenga varias imágenes
-    # read_only=True: Solo se pueden ver las imágenes, no modificarlas desde este serializer
     images = ProductImageSerializer(many=True, read_only=True)
     offers = serializers.SerializerMethodField()
     coupon = serializers.SerializerMethodField()
-    
+    # Indicamos el modelo y los campos a utilizar
     class Meta:
-        # Indicamos el modelo que deseamos utilizar
         model = Products
-        # Serializamos todos los campos del modelo
         fields = '__all__'
         read_only_fields = ('producer',)
-        # funcion personalizada para validar el precio
+
+    # validaciones
     def validate_price(self, value):
         if value <= 0:
             raise serializers.ValidationError("El precio debe ser mayor a 0")
         return value
 
-    # funcion personalizada para validar el stock
     def validate_stock(self, value):
         if value < 0:
             raise serializers.ValidationError("El stock no puede ser negativo")
         return value
     
-    # Funcion que nos permite Obtener las ofertas 
+    # Funcion que permite obtener la oferta activa del producto si cuenta con esta
     def get_offers(self, obj):
-        # Obtenemos las ofertas que estan activadas
         offers = obj.offers.filter(active=True)
-        # Buscamso las ofertas obteniudas y verificamos que esten activas
         active_offers = [offer for offer in offers if offer.is_active()]
-        # Serializamos las ofertas con el serializador
+
         from offers_and_coupons.serializer import OfferSerializer
-        # Retornamos la informascion serializada
-        return OfferSerializer(active_offers, many=True).data
+        if active_offers:
+            return OfferSerializer(active_offers[0], many=False).data
+        return None
     
-    # Funcion para obtener los cupones 
+    # Funcion que permite obtener el coupon activo del producto si cuenta con esta
     def get_coupon(self, obj):
-        # Obtenemos los cupones que esten activos
-        coupon = obj.coupons.filter(active=True)
-        # Recorremos la lista y verificamos que esten activos
-        active_coupon = [coupon for coupon in coupon if coupon.is_active()]
-        # Serializamos y retornamos la inofrmacion
+        coupons = obj.coupons.filter(active=True)
+        active_coupons = [c for c in coupons if c.is_active()]
+
         from offers_and_coupons.serializer import CouponSerializer
-        return CouponSerializer(active_coupon, many=True).data
+        if active_coupons:
+            return CouponSerializer(active_coupons[0], many=False).data
+        return None
+
 
 
 # Serializador para editar un producto 
 class EditProductSerializer(serializers.ModelSerializer):
-    # Variable que almacenará las nuevas imágenes
-    images = serializers.ListField(
-        child=serializers.ImageField(max_length=None, allow_empty_file=False, use_url=False),
-        write_only=True,
-        required=False
-    )
 
     # Lista en donde almacenaremos los ID de las imágenes que queremos eliminar 
     delete_images = serializers.ListField(
@@ -101,7 +89,6 @@ class EditProductSerializer(serializers.ModelSerializer):
             "producer",
             "date_of_registration",
             "state",
-            "images",
             "delete_images",
             "current_images"
         ]
@@ -134,8 +121,8 @@ class EditProductSerializer(serializers.ModelSerializer):
             instance.category.set(categories_data)
 
         # Agrga lasnuevam s iamgenes del usuario
-        for image in new_images:
-            ProductImage.objects.create(product=instance, image=image)
+        # for image in new_images:
+        #     ProductImage.objects.create(product=instance, image=image)
 
         # Elimina las imagenes selecionadas
         if delete_images_ids:

@@ -8,6 +8,9 @@ Eliminar un producto de mis favoritos
 Añadir una categoria a favoritos y Obtener las categorias favoritos de un usuario
     GET & POST: http://127.0.0.1:8000/api/cart/categories/
 
+Eliminar una categoria de favoritos
+    DELETE: http://127.0.0.1:8000/api/cart/delete-category/2/
+
 Añade y Obtiene los productos del carrito
     GET & POST:http://127.0.0.1:8000/api/cart/my-cart/
 

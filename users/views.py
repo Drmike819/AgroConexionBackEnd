@@ -26,7 +26,6 @@ class CurrentUserView(APIView):
 # Vista para el registro de usuarios   
 class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
-
     # si el metodo de peticion es (POST)
     def post(self, request, *args, **kwargs):
         serializer = RegisterUserSerializer(data = request.data)

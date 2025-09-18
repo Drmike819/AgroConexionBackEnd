@@ -88,18 +88,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'campeche_backend.wsgi.application'
 
+import os
+from dotenv import load_dotenv
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+load_dotenv(BASE_DIR / ".env")
+print("DB_HOST = ", os.getenv("DB_HOST"))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'agroconexion',
-        'USER': 'root',
-        'PASSWORD': 'contra12345',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST", os.getenv("DB_HOST")),
+        'PORT': os.getenv("DB_PORT", "3306"),
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
@@ -153,10 +155,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://localhost:3000',
+    "http://127.0.0.1:3000",
 ]
 
-
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

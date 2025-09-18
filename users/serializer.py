@@ -225,6 +225,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'profile_image',
             'is_seller',
             'group_profile',
+            'user_type',
         ]
         extra_kwargs = {
             'username': {'required': False},

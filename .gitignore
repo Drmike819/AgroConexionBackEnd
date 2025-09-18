@@ -5,3 +5,10 @@ __pycache__/
 *.sqlite3
 .env
 BasedeDatos/
+
+backup.sql
+*docker-compose.yml
+*docker
+*dockerfile.AgroConexion
+*dockerfile.DataBase
+*datos.json

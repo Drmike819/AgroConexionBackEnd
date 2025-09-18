@@ -3,10 +3,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Offers, Coupon
+from .models import Offers, Coupon, UserCoupon
 from products.models import Products
 from rest_framework.generics import get_object_or_404
-from .serializer import NewOffertSerializer, NewCouponSerializer
+from .serializer import NewOffertSerializer, NewCouponSerializer, UserCouponSerializer
 
 # Create your views here.
 
@@ -168,3 +168,26 @@ class DesactiveCoupon(APIView):
             {"message": f"La oferta fue {'activada' if active else 'desactivada'} correctamente."},
             status=status.HTTP_200_OK
         )
+        
+
+# View para imprimir los coupones que tiene el usuario
+class UserAvailableCouponsView(APIView):
+    # Inidcamos los permisos de la vista y su metodo de autentificacion
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Traemos todos los cupones asignados y no usados
+        coupons = UserCoupon.objects.filter(
+            user=request.user,
+            used=False,
+            coupon__active=True  # primero nos aseguramos de que esté marcado activo
+        )
+        
+        # Filtramos usando la función is_active del modelo Coupon
+        coupons = [uc for uc in coupons if uc.coupon.is_active()]
+
+        # Serializamod los productos y enviamos la respuesta
+        serializer = UserCouponSerializer(coupons, many=True)
+        return Response(serializer.data, status=200)
+        

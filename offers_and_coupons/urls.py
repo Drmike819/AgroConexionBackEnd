@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     NewOfferView, DesactiveOffert,
-    NewCoupontView, DesactiveCoupon 
+    NewCoupontView, DesactiveCoupon, UserAvailableCouponsView 
 )
 # url de la aplicacion (users)
 urlpatterns = [
@@ -11,5 +11,5 @@ urlpatterns = [
     
     path('new-coupon/', NewCoupontView.as_view(), name='new_coupon'),
     path('coupon/<int:coupon_id>/active/', DesactiveCoupon.as_view(), name='desactive_coupon'),
-    
+    path("user/coupons/", UserAvailableCouponsView.as_view(), name="user-coupons"),
 ]

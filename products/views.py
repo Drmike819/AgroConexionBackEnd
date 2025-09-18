@@ -8,7 +8,7 @@ from .serializer import (
 )
 
 from rest_framework.views import APIView
-from .models import Category, Products, Grades
+from .models import Category, Products, Grades, ProductImage
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -269,6 +269,10 @@ class EditProductView(APIView):
         # Valida y actualiza el producto
         if serializer.is_valid():
             producto_actualizado = serializer.save()
+            # por cada foto enviada se guyaradara a la base de datos y se conectara con el producto
+            for file in files:
+                ProductImage.objects.create(product=producto_actualizado, image=file)
+            
             return Response(
                 {
                     "detail": "Producto actualizado correctamente",

@@ -1,2 +1,15 @@
 Creacion de ua oferta
     POST: http://127.0.0.1:8000/api/offers_and_coupons/new-offert/
+
+Creacion de un nuevo Coupon
+    POST: http://127.0.0.1:8000/api/offers_and_coupons/new-coupon/
+
+
+Cambiar el estado del cupon 
+    PUT:  http://127.0.0.1:8000/api/offers_and_coupons/coupon/14/active/
+
+Cambiar el estado de la oferta 
+    PUT:  http://127.0.0.1:8000/api/offers_and_coupons/offers/14/active/
+
+Cupones disponibles de un usuario
+    GET: http://127.0.0.1:8000/api/offers_and_coupons/user/coupons/

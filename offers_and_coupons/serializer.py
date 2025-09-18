@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils import timezone
 from datetime import timedelta
 
-from .models import Offers, Coupon
+from .models import Offers, Coupon, UserCoupon
 
 from products.models import Products
 from products.serializer import SerializerProducts
@@ -137,6 +137,15 @@ class CouponSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coupon
         fields = '__all__'
+        
+# Serializador para mostrar los cupones de un usuario
+class UserCouponSerializer(serializers.ModelSerializer):
+    # Obtenemos el serializador de cupones
+    coupon = CouponSerializer(read_only=True)
+    # Indicamos el modelo y los campos a utilizar
+    class Meta:
+        model = UserCoupon
+        fields = ["id", "coupon", "used", "assigned_at"]
 
 
 # Serializador para validar el fromato del codigo 

@@ -157,7 +157,7 @@ class InvoiceCreateSerializer(serializers.Serializer):
             image_url = first_image.image.url if first_image else None
 
             # Creamos la notificacion
-            notificacion = send_notification(
+            notificacion_vendedor = send_notification(
                 # Usuario al cual se le enviare la notificacion
                 user=product.producer,
                 # Tiopo de notificacion
@@ -176,7 +176,7 @@ class InvoiceCreateSerializer(serializers.Serializer):
                 }
             )
 
-            print(notificacion)
+            print(notificacion_vendedor)
             # Actualizar stock del producto
             product.stock -= quantity
             product.save()
@@ -187,6 +187,26 @@ class InvoiceCreateSerializer(serializers.Serializer):
         # Actualizar el total de la factura
         invoice.total = total
         invoice.save()
+        # Envio de notificacion para el comprador
+        notificacion_comprador = send_notification(
+                # Usuario al cual se le enviare la notificacion
+                user=user,
+                # Tiopo de notificacion
+                type='purchase',
+                # Titulo
+                title='¡Nueva Compra!',
+                # Mensaje
+                message=f"Haz realizado un nueva compra de valor total de {invoice.total}",
+                # Url de la imagen
+                image=image_url,
+                # Informacion que puede variar a eleccion
+                data={
+                    "buyer": user.username,
+                    "product": product.name,
+                    "quantity": quantity
+                }
+            )
+        print(notificacion_comprador)
         return invoice
 
 
