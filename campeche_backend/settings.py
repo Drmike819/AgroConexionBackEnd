@@ -9,23 +9,26 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-071y@@e+v$up%!gue%bh5g@8kor0(3q#_w#bu(s6i3q8*8o7o2'
+#SECRET_KEY = 'django-insecure-071y@@e+v$up%!gue%bh5g@8kor0(3q#_w#bu(s6i3q8*8o7o2'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
+ALLOWED_HOSTS_STRING = os.getenv("ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = ALLOWED_HOSTS_STRING.split(',') if ALLOWED_HOSTS_STRING else []
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -88,11 +91,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'campeche_backend.wsgi.application'
 
-import os
-from dotenv import load_dotenv
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / ".env")
+
+
 print("DB_HOST = ", os.getenv("DB_HOST"))
 DATABASES = {
     'default': {
@@ -100,8 +101,8 @@ DATABASES = {
         'NAME': os.getenv("DB_NAME"),
         'USER': os.getenv("DB_USER"),
         'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': os.getenv("DB_HOST", os.getenv("DB_HOST")),
-        'PORT': os.getenv("DB_PORT", "3306"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
@@ -175,14 +176,29 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'users.CustomUser'
 
 
-import os
+
 # Ruta donde se guardarán los archivos multimedia (imágenes, videos, etc.)
 MEDIA_URL = '/media/'  # La URL para acceder a los archivos multimedia
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # El directorio en el que se guardarán los archivos multimedia
+# Configuración de AWS S3 para producción
+if not DEBUG:
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None # Para mayor seguridad, gestiona permisos desde el bucket.
+    AWS_S3_VERIFY = True
+
+    # Configuración para que django-storages use S3 para los archivos MEDIA
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    
+    # La URL pública de tu bucket de S3
+    MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
+
 
 
 # Configuración de JWT
-from datetime import timedelta
 # definimos los tiempos de lo stokens
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -195,14 +211,14 @@ SIMPLE_JWT = {
 
 
 # Configuracion para enviar los correos
-from decouple import config
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = config("EMAIL_HOST_USER")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER") 
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD") 
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
 
 # Conexion de lso procesos asincronicos 
 ASGI_APPLICATION = 'campeche_backend.asgi.application'
