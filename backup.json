@@ -3546,36 +3546,6 @@
     }
 },
 {
-    "model": "cart.shoppingcart",
-    "pk": 2,
-    "fields": {
-        "user": [
-            "Juan_Admin"
-        ],
-        "created_at": "2025-06-23T16:36:00.215Z"
-    }
-},
-{
-    "model": "cart.shoppingcart",
-    "pk": 34,
-    "fields": {
-        "user": [
-            "Dr.mike"
-        ],
-        "created_at": "2025-08-18T01:57:43.504Z"
-    }
-},
-{
-    "model": "cart.shoppingcart",
-    "pk": 37,
-    "fields": {
-        "user": [
-            "Admin"
-        ],
-        "created_at": "2025-09-17T15:39:49.273Z"
-    }
-},
-{
     "model": "cart.favoritescategories",
     "pk": 5,
     "fields": {
