@@ -10,6 +10,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         user = self.scope["user"]
         # Si no se puede obtener el usuario
         if user.is_anonymous:
+            self.group_name = None
             # Cerramos la conexion
             await self.close()
         else:

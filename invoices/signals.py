@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from .models import Invoice, DetailInvoice
 from offers_and_coupons.models import Coupon, UserCoupon
 from notifications.utils import send_notification
+from django.utils import timezone
 
 @receiver(post_save, sender=DetailInvoice)
 def check_and_assign_coupon_from_detail(sender, instance, created, **kwargs):
@@ -31,11 +32,12 @@ def check_and_assign_coupon_from_detail(sender, instance, created, **kwargs):
                 seller = coupon.seller
                 user_has_coupon = UserCoupon.objects.filter(
                     user=user,
-                    coupon__product=product,
-                    coupon__seller=seller
+                    coupon=coupon,  # mucho más claro que coupon__id
+                    used=False,
+                    coupon__end_date__gte=timezone.now()
                 ).exists()
 
-                if not user_has_coupon:
+                if not UserCoupon.has_valid_coupon(user, coupon):
                     
                     # 5. Crear la instancia de UserCoupon
                     cupon_user = UserCoupon.objects.create(

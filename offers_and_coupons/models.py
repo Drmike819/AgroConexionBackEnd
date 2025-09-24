@@ -102,3 +102,12 @@ class UserCoupon(models.Model):
     # Funcion que devuelve un mensaje
     def __str__(self):
         return f"Coupon {self.coupon.code} para {self.user.username} ({'Usado' if self.used else 'Disponible'})"
+    
+    @classmethod
+    def has_valid_coupon(cls, user, coupon):
+        return cls.objects.filter(
+            user=user,
+            coupon=coupon,
+            used=False,
+            coupon__end_date__gte=timezone.now()
+        ).exists()
