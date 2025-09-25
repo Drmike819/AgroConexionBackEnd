@@ -186,7 +186,6 @@ if not DEBUG:
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None # Para mayor seguridad, gestiona permisos desde el bucket.
     AWS_S3_VERIFY = True
@@ -195,7 +194,7 @@ if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     
     # La URL pública de tu bucket de S3
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+    MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
 
 
 
