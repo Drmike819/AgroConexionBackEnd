@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from campeche_backend.storages import PublicMediaStorage
 # Modulo para crear identificadores unicos 
 import uuid
 # Manejo de horarios y tiempos dependiendo de la zona horaria
@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     # Dirección del usuario
     address = models.TextField(max_length=500, null=True, blank=True)
     # Imagen de perfil
-    profile_image = models.ImageField(upload_to="profile_pictures/", blank=True, null=True, default='/profile_pictures/perfil.jpeg')
+    profile_image = models.ImageField(upload_to="profile_pictures/",storage=PublicMediaStorage(), blank=True, null=True, default='/profile_pictures/perfil.jpeg')
     
     USER_TYPE_CHOICES = [
         ('common', 'Usuario común'),
@@ -63,9 +63,9 @@ class GroupProfile(models.Model):
     # Cedula
     representative_cedula = models.CharField(max_length=20)
     # Imagen de la cedula
-    image_cedula = models.ImageField(upload_to="documents/cedula/", blank=True, null=True,)
+    image_cedula = models.ImageField(upload_to="documents/cedula/",storage=PublicMediaStorage(), blank=True, null=True,)
     # Rut
-    rut_document = models.FileField(upload_to='documents/rut/', null=True, blank=True)
+    rut_document = models.FileField(upload_to='documents/rut/',storage=PublicMediaStorage(), null=True, blank=True)
 
     def __str__(self):
         return f"(Agrupación {self.user.username})"

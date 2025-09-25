@@ -1,6 +1,6 @@
 from django.db import models
 
-
+from campeche_backend.storages import PublicMediaStorage
 from users.models import CustomUser
 # Create your models here.
 
@@ -11,7 +11,7 @@ class Category(models.Model):
     # descripcion de la categoria debe ser requerido
     description = models.TextField(blank=False, null=False)
     # imagen de las categorias
-    image = models.ImageField(blank=False, null=False, default="categories_picture/default.jpeg", upload_to="categories_picture/")
+    image = models.ImageField(blank=False, null=False, default="categories_picture/default.jpeg", upload_to="categories_picture/", storage=PublicMediaStorage())
     
     class Meta:
         verbose_name = "Category"
@@ -80,7 +80,7 @@ class ProductImage(models.Model):
     # identidicador del producto
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name="images")
     # imagen del producto
-    image = models.ImageField(upload_to="products_pictures/")
+    image = models.ImageField(upload_to="products_pictures/", storage=PublicMediaStorage())
     
     class Meta:
         verbose_name = "Image Product"

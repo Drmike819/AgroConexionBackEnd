@@ -2,6 +2,7 @@ from django.db import models
 
 from users.models import CustomUser
 from products.models import Products
+from campeche_backend.storages import PublicMediaStorage
 
 # Create your models here.
 
@@ -29,7 +30,7 @@ class CommentsImage(models.Model):
     # Conexion con el comentario
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE, related_name="images")
     # Campo en donde se alamcenara la imagen
-    image = models.ImageField(upload_to="comments_pictures/", null=True, blank=True)
+    image = models.ImageField(upload_to="comments_pictures/", null=True, blank=True, storage=PublicMediaStorage())
     
     class Meta:
         verbose_name = "Image Comment"
