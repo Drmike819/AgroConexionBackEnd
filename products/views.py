@@ -143,7 +143,7 @@ class DetailProductView(APIView):
             # en caso de que no exista retornamos un mensaje
             return Response({'rest': 'Producto no disponible'})
         # en casoi de que exista llamamos a serializer y le indicamos el objeto en concreto que serializara
-        serializer = SerializerProducts(product)
+        serializer = SerializerProducts(instance=product, context={"request": request})
         # retornamos la informacion del serializer y un mensdaje HTTP
         return Response(serializer.data, status=status.HTTP_200_OK)
 
