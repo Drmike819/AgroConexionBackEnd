@@ -1,6 +1,6 @@
 from .models import Category, Products, ProductImage, Grades
 from rest_framework import serializers
-
+from users.serializer import InfotUserSerializer
 # serializer para tener las categorias en archivo JSON(API)
 class SerializerCategories(serializers.ModelSerializer):
     class Meta:
@@ -23,6 +23,7 @@ class SerializerProducts(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     offers = serializers.SerializerMethodField()
     coupon = serializers.SerializerMethodField()
+    producer = InfotUserSerializer()
     # Indicamos el modelo y los campos a utilizar
     class Meta:
         model = Products

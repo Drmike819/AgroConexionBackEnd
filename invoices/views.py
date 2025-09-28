@@ -154,13 +154,10 @@ class InvoiceDetailView(RetrieveAPIView):
 
 # Vista que nos permite ver estadisticas
 class UserStatsView(APIView):
-    # Auteticacion requerida
     authentication_classes = [JWTAuthentication]
-    # Tipo de permisos para acceder a la vista
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Obtenemos el usuario logeado
         user = request.user
 
         # Total gastado por el usuario como comprador
@@ -169,18 +166,20 @@ class UserStatsView(APIView):
         # Total ganado por el usuario como vendedor
         total_earned = DetailInvoice.objects.filter(seller=user).aggregate(total=Sum('subtotal'))['total'] or 0
 
-        # Producto más vendido (por cantidad total en todas las facturas)
+        # Producto más vendido del usuario logeado
         most_sold = (
             DetailInvoice.objects
+            .filter(seller=user)
             .values('product__name')
             .annotate(total_quantity=Sum('quantity'))
             .order_by('-total_quantity')
             .first()
         )
 
-        # Producto menos vendido (por cantidad total en todas las facturas)
+        # Producto menos vendido del usuario logeado
         least_sold = (
             DetailInvoice.objects
+            .filter(seller=user)
             .values('product__name')
             .annotate(total_quantity=Sum('quantity'))
             .order_by('total_quantity')
@@ -199,6 +198,7 @@ class UserStatsView(APIView):
                 'quantity': least_sold['total_quantity'] if least_sold else 0
             }
         })
+
         
    
 # Vista que nos permite saber los 5 productos mas vendidos     
@@ -223,7 +223,7 @@ class BestSellingProducts(APIView):
         product_ids = [product['product'] for product in top_products]
         
         # Obtenemos el producto filktrado por el id
-        products = Products.objects.filter(id__in = product_ids)
+        products = Products.objects.filter(id__in = product_ids).exclude(state="inactivo")
         # Organizamos la lista de los productos por su index en la lista de ids de los productos
         products = sorted(products, key=lambda p: product_ids.index(p.id))
         

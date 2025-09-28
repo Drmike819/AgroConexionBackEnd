@@ -5,6 +5,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import re 
 
 
+# Serializador para obtenetr la informacion del usuario creador de un comentario  
+class InfotUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'username', 'profile_image']
+        
 # Serializador de registro
 class RegisterUserSerializer(serializers.ModelSerializer):
     # Definir la confirmación de contraseña como un campo adicional
