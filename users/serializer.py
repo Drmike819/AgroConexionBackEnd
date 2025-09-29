@@ -76,11 +76,17 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         )
         
         token_obj = EmailVerificationToken.create_token(user, 'account_verification', use_code=True)
+        context = {
+            'username': user.username,
+            'verification_code': token_obj.code,
+        }
+        
+        # Llama al nuevo servicio de correo con la plantilla y el contexto
         EmailService.send_email(
-            "Confirma tu cuenta",
-            f"Tu código de verificación es: {token_obj.code}\n\n"
-            "Ingresa este código en la página de verificación para activar tu cuenta.",
-            [user.email]
+            subject="Confirma tu cuenta",
+            recipient_list=[user.email],
+            template_name='emails/account_verification.html', # Ruta a tu plantilla
+            context=context
         )
         # retorna el usuario creado
         return user
@@ -174,11 +180,17 @@ class RegisterGroupSerializer(serializers.ModelSerializer):
         
         # Creamos mensaje y token para confirmar la cuenta
         token_obj = EmailVerificationToken.create_token(user, 'account_verification', use_code=True)
+        context = {
+            'username': user.username,
+            'verification_code': token_obj.code,
+        }
+        
+        # Llama al servicio de correo actualizado
         EmailService.send_email(
-            "Confirma tu cuenta",
-            f"Tu código de verificación es: {token_obj.code}\n\n"
-            "Ingresa este código en la página de verificación para activar tu cuenta.",
-            [user.email]
+            subject="Confirma tu cuenta de Agrupación",
+            recipient_list=[user.email],
+            template_name='emails/account_verification.html', # Reutilizamos la misma plantilla
+            context=context
         )
         return user
 

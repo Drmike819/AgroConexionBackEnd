@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Verificación - AgroConexión</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5dd;">
+    <center style="width: 100%; table-layout: fixed; background-color: #f5f5dd; padding: 40px 0;">
+        <div style="max-width: 600px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px S10px rgba(0,0,0,0.1); border: 1px solid #e5e5e5;">
+            
+            <table align="center" style="border-spacing: 0; margin: 0 auto; width: 100%; max-width: 600px; border-radius: 8px;">
+                <tr>
+                    <td style="padding: 20px 0; text-align: center;">
+                        <a href="[URL_DE_TU_SITIO_WEB]" target="_blank"><img src="[URL_DE_TU_LOGO]" width="180" alt="Logo de AgroConexión" style="border:0;"></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 30px 20px 30px;">
+                        <h1 style="margin: 0; font-size: 24px; font-weight: bold; color: #000000; text-align: center;">Confirma tu cuenta en AgroConexión</h1>
+                        <p style="font-size: 16px; color: #333333; line-height: 1.6; text-align: center; margin-top: 20px;">
+                            Hola, <strong>{{ username }}</strong>. ¡Bienvenido al campo digital! Usa el siguiente código para activar tu cuenta.
+                        </p>
+                        <div style="background-color: #ffffff; border: 2px dashed #287233; border-radius: 8px; padding: 20px; margin: 30px auto; max-width: 300px;">
+                            <p style="margin: 0; font-size: 36px; font-weight: 700; color: #287233; letter-spacing: 4px; text-align: center;">
+                                {{ verification_code }}
+                            </p>
+                        </div>
+                        <p style="font-size: 14px; color: #555555; line-height: 1.5; text-align: center;">
+                            Si no creaste una cuenta en AgroConexión, por favor ignora este correo.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color: #fafaf5; padding: 20px 30px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; border-top: 1px solid #e5e5e5;">
+                        <p style="margin: 0; font-size: 12px; color: #555555; text-align: center;">
+                            &copy; {% now "Y" %} <strong>AgroConexión</strong>. Conectando el campo con el mundo.<br>
+                            Mosquera, Cundinamarca, Colombia
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </center>
+</body>
+</html>
