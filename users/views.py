@@ -167,15 +167,20 @@ class LoginView(APIView):
 
             # Si tiene 2FA activo envia codigo de verificacion
             token_obj = EmailVerificationToken.create_token(user, 'two_factor', use_code=True)
+            subject = "Código de Acceso - AgroConexión"
+            context = {
+                'username': user.username,
+                'verification_code': token_obj.code,
+                'subject_line': subject,
+                'main_message': 'Usa el siguiente código para completar tu inicio de sesión de forma segura.'
+            }
             EmailService.send_email(
-                "Código de verificación de acceso",
-                f"Tu código es: {token_obj.code}",
-                [user.email]
+                subject=subject,
+                recipient_list=[user.email],
+                template_name='emails/generic_code_email.html',
+                context=context
             )
-            return Response({"message": "Código enviado a tu correo.",
-                             "email": user.email,}
-                             ,status=200)
-        # Mensaje de error si el usuario no existe
+            return Response({"message": "Código enviado a tu correo.", "email": user.email}, status=200)
         except CustomUser.DoesNotExist:
             return Response({"error": "Usuario no encontrado"}, status=404)
 
@@ -282,17 +287,21 @@ class RequestPasswordChangeView(APIView):
     # Method POST
     def post(self, request):
         # Creamos el token de validacion
-        token_obj = EmailVerificationToken.create_token(
-            request.user, 'password_change', use_code=True
-        )
-        # Creamos y enviamos el correo con el codigo de verificacion
+        token_obj = EmailVerificationToken.create_token(request.user, 'password_change', use_code=True)
+        subject = "Confirma el cambio de contraseña"
+        context = {
+            'username': request.user.username,
+            'verification_code': token_obj.code,
+            'subject_line': subject,
+            'main_message': 'Recibimos una solicitud para cambiar tu contraseña. Usa el siguiente código para confirmarla.'
+        }
         EmailService.send_email(
-            "Confirma el cambio de contraseña",
-            f"Tu código es: {token_obj.code}",
-            [request.user.email]
+            subject=subject,
+            recipient_list=[request.user.email],
+            template_name='emails/generic_code_email.html',
+            context=context
         )
-        return Response({"message": "Código enviado a tu correo.",
-                         "email": request.user.email}, status=status.HTTP_200_OK)
+        return Response({"message": "Código enviado a tu correo.", "email": request.user.email}, status=200)
 
 
 # Vista que permite actualizar la contraseña
@@ -343,19 +352,21 @@ class RequestPasswordResetView(APIView):
             user = CustomUser.objects.get(email=email)
 
             # Crear token con código
-            token_obj = EmailVerificationToken.create_token(
-                user, 'password_reset', use_code=True
-            )
-
-            # Enviar email 
+            token_obj = EmailVerificationToken.create_token(user, 'password_reset', use_code=True)
+            subject = "Restablece tu contraseña"
+            context = {
+                'username': user.username,
+                'verification_code': token_obj.code,
+                'subject_line': subject,
+                'main_message': 'Recibimos una solicitud para restablecer tu contraseña. Usa este código para crear una nueva.'
+            }
             EmailService.send_email(
-                "Codigo de verificacion cambio de contraseña",
-                f"Tu codigo es: {token_obj.code}",
-                [user.email]
+                subject=subject,
+                recipient_list=[user.email],
+                template_name='emails/generic_code_email.html',
+                context=context
             )
-            # Respuesta de exito
             return Response({"message": "Código de recuperación enviado a tu correo."})
-        # Respuesta de error en caso de que el correo no sea el correcto
         except CustomUser.DoesNotExist:
             return Response({"error": "No existe una cuenta con ese correo."}, status=404)
 
