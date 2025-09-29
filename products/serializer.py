@@ -27,7 +27,11 @@ class SerializerProducts(serializers.ModelSerializer):
     # Indicamos el modelo y los campos a utilizar
     class Meta:
         model = Products
-        fields = '__all__'
+        fields = [
+            'id', 'name', 'description', 'price', 'stock',
+            'unit_of_measure', 'category', 'date_of_registration',
+            'state', 'images', 'offers', 'coupon', 'producer'
+        ]
         read_only_fields = ('producer',)
 
     # validaciones

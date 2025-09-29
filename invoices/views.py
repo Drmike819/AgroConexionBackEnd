@@ -223,7 +223,7 @@ class BestSellingProducts(APIView):
         product_ids = [product['product'] for product in top_products]
         
         # Obtenemos el producto filktrado por el id
-        products = Products.objects.filter(id__in = product_ids).exclude(state="inactivo")
+        products = Products.objects.filter(id__in = product_ids).exclude(state="Inactivo")
         # Organizamos la lista de los productos por su index en la lista de ids de los productos
         products = sorted(products, key=lambda p: product_ids.index(p.id))
         
