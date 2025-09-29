@@ -23,7 +23,7 @@ class SerializerProducts(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     offers = serializers.SerializerMethodField()
     coupon = serializers.SerializerMethodField()
-    producer = InfotUserSerializer()
+    producer = InfotUserSerializer(read_only=True)
     # Indicamos el modelo y los campos a utilizar
     class Meta:
         model = Products
